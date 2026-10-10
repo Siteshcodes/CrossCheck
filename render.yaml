@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: crosscheck
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      - key: OPENAI_MODEL
+        value: gpt-6.1-sol
+      - key: OPENAI_API_KEY
+        sync: false
