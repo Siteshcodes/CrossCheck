@@ -1,0 +1,168 @@
+{
+  "scenario": "IPO Horizon / Horizon Financial Planning Limited",
+  "tests": [
+    {
+      "exit_code": 0,
+      "latency_ms": 3087.485,
+      "output": "----------------------------------------------------------------------\nRan 52 tests in 2.867s\n\nOK\n"
+    }
+  ],
+  "investigations": [
+    {
+      "run": 1,
+      "latency_ms": 2945.027,
+      "summary": {
+        "useful_finding_count": 4,
+        "independent_evidence_count": 3,
+        "verification_mechanism_count": 3,
+        "contradicted_claim_count": 2,
+        "verified_claim_count": 2,
+        "unresolved_claim_count": 0,
+        "evidence_groups": {
+          "eg_df84207c67a221f5ddc0dcae": {
+            "mechanism": "regulator_record_lookup",
+            "evidence_ids": [
+              "e1",
+              "e4"
+            ]
+          },
+          "eg_a7b414fc231899c9cdbd00e7": {
+            "mechanism": "legal_entity_registry",
+            "evidence_ids": [
+              "e2"
+            ]
+          },
+          "eg_5a73136dd64b84acc31e9679": {
+            "mechanism": "rdap_domain_provenance",
+            "evidence_ids": [
+              "e3"
+            ]
+          }
+        },
+        "demo_gate": {
+          "result": "PASS",
+          "checks": {
+            "4_to_5_critical_claims": true,
+            "at_least_3_useful_findings": true,
+            "at_least_2_independent_evidence_groups": true,
+            "at_least_2_verification_mechanisms": true,
+            "at_most_2_unresolved_critical_claims": true,
+            "true_fact_does_not_authenticate_contacting_party": true,
+            "zero_fabricated_evidence": true
+          }
+        },
+        "boundary": "Useful findings are distinct resolved critical predicates; they are not independent sources. FCA-derived findings share one group. LLM reliability is evaluated separately."
+      },
+      "result_file": "D:\\8.Hackthon\\forge-kill-tests\\results\\clone-investigation-1.json",
+      "source_failures": []
+    },
+    {
+      "run": 2,
+      "latency_ms": 2585.174,
+      "summary": {
+        "useful_finding_count": 4,
+        "independent_evidence_count": 3,
+        "verification_mechanism_count": 3,
+        "contradicted_claim_count": 2,
+        "verified_claim_count": 2,
+        "unresolved_claim_count": 0,
+        "evidence_groups": {
+          "eg_df84207c67a221f5ddc0dcae": {
+            "mechanism": "regulator_record_lookup",
+            "evidence_ids": [
+              "e1",
+              "e4"
+            ]
+          },
+          "eg_a7b414fc231899c9cdbd00e7": {
+            "mechanism": "legal_entity_registry",
+            "evidence_ids": [
+              "e2"
+            ]
+          },
+          "eg_5a73136dd64b84acc31e9679": {
+            "mechanism": "rdap_domain_provenance",
+            "evidence_ids": [
+              "e3"
+            ]
+          }
+        },
+        "demo_gate": {
+          "result": "PASS",
+          "checks": {
+            "4_to_5_critical_claims": true,
+            "at_least_3_useful_findings": true,
+            "at_least_2_independent_evidence_groups": true,
+            "at_least_2_verification_mechanisms": true,
+            "at_most_2_unresolved_critical_claims": true,
+            "true_fact_does_not_authenticate_contacting_party": true,
+            "zero_fabricated_evidence": true
+          }
+        },
+        "boundary": "Useful findings are distinct resolved critical predicates; they are not independent sources. FCA-derived findings share one group. LLM reliability is evaluated separately."
+      },
+      "result_file": "D:\\8.Hackthon\\forge-kill-tests\\results\\clone-investigation-2.json",
+      "source_failures": []
+    },
+    {
+      "run": 3,
+      "latency_ms": 2518.853,
+      "summary": {
+        "useful_finding_count": 4,
+        "independent_evidence_count": 3,
+        "verification_mechanism_count": 3,
+        "contradicted_claim_count": 2,
+        "verified_claim_count": 2,
+        "unresolved_claim_count": 0,
+        "evidence_groups": {
+          "eg_df84207c67a221f5ddc0dcae": {
+            "mechanism": "regulator_record_lookup",
+            "evidence_ids": [
+              "e1",
+              "e4"
+            ]
+          },
+          "eg_a7b414fc231899c9cdbd00e7": {
+            "mechanism": "legal_entity_registry",
+            "evidence_ids": [
+              "e2"
+            ]
+          },
+          "eg_5a73136dd64b84acc31e9679": {
+            "mechanism": "rdap_domain_provenance",
+            "evidence_ids": [
+              "e3"
+            ]
+          }
+        },
+        "demo_gate": {
+          "result": "PASS",
+          "checks": {
+            "4_to_5_critical_claims": true,
+            "at_least_3_useful_findings": true,
+            "at_least_2_independent_evidence_groups": true,
+            "at_least_2_verification_mechanisms": true,
+            "at_most_2_unresolved_critical_claims": true,
+            "true_fact_does_not_authenticate_contacting_party": true,
+            "zero_fabricated_evidence": true
+          }
+        },
+        "boundary": "Useful findings are distinct resolved critical predicates; they are not independent sources. FCA-derived findings share one group. LLM reliability is evaluated separately."
+      },
+      "result_file": "D:\\8.Hackthon\\forge-kill-tests\\results\\clone-investigation-3.json",
+      "source_failures": []
+    }
+  ],
+  "separate_live_extraction_benchmark": {
+    "status": "BLOCKED",
+    "reason": "OPENAI_API_KEY is not configured locally; no requests or fabricated responses",
+    "model": "gpt-6.1-sol",
+    "case_count": 12,
+    "critical_claim_recall": null,
+    "unsupported_hallucinated_claims": null,
+    "invalid_routing": null,
+    "latency_ms": null
+  },
+  "deterministic_demo_gate": "PASS",
+  "boundary": "Synthetic annotated communication; all investigation source evidence is live. Live LLM accuracy is a separate measurement and never changes deterministic evidence states."
+}

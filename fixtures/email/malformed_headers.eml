@@ -1,0 +1,9 @@
+X-Fixture-Notice: SYNTHETIC UNIT TEST ONLY; deliberately malformed header
+Authentication-Results: mx.receiver.example;
+ spf=pass (unclosed synthetic comment smtp.mailfrom=notices@example.org;
+ dkim=pass header.d=example.org; dmarc=pass header.from=example.org
+From: Example Foundation <notices@example.org>
+To: recipient@receiver.example
+Subject: Synthetic malformed Authentication-Results scenario
+
+Invented malformed input must fail closed and retain the raw evidence.

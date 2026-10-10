@@ -1,0 +1,53 @@
+{
+  "dataset_origin": "synthetic_local_schema_and_input_validation",
+  "network_requests": 0,
+  "passed": 10,
+  "checks": [
+    {
+      "input": "microsoft.com...",
+      "expected_rejection": true,
+      "reason": "Invalid DNS label in supplied domain"
+    },
+    {
+      "input": "microsoft.com..",
+      "expected_rejection": true,
+      "reason": "Invalid DNS label in supplied domain"
+    },
+    {
+      "input": "fa\u00df.de",
+      "expected_rejection": true,
+      "reason": "Supply an ASCII domain or IDNA2008 A-label (xn--); Unicode conversion is not inferred"
+    },
+    {
+      "input": "https://microsoft.com",
+      "expected_rejection": true,
+      "reason": "Invalid DNS label in supplied domain"
+    },
+    {
+      "input": "1.2.3.4",
+      "expected_rejection": true,
+      "reason": "An IP address is not a domain"
+    },
+    {
+      "input": "microsoft.com.",
+      "normalized": "microsoft.com"
+    },
+    {
+      "input": "MICROSOFT.COM",
+      "normalized": "microsoft.com"
+    },
+    {
+      "input": "xn--fa-hia.de",
+      "normalized": "xn--fa-hia.de"
+    },
+    {
+      "synthetic_schema_value": "roles string",
+      "expected_rejection": true,
+      "reason": "RDAP entity roles must be an array of nonempty strings"
+    },
+    {
+      "synthetic_schema_value": "empty registrar name",
+      "empty_name_preserved_as_unavailable": true
+    }
+  ]
+}

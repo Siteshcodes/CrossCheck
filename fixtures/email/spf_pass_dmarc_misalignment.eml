@@ -1,0 +1,8 @@
+X-Fixture-Notice: SYNTHETIC UNIT TEST ONLY; no actual SPF/DKIM/DMARC verification
+Authentication-Results: mx.receiver.example; spf=pass smtp.mailfrom=bounce@sender.example.net; dkim=none; dmarc=fail header.from=example.org
+From: Example Foundation <notices@example.org>
+Return-Path: <bounce@sender.example.net>
+To: recipient@receiver.example
+Subject: Synthetic SPF pass with receiver-reported DMARC failure
+
+Invented fixture: SPF identity differs from From; receiver reports DMARC fail.

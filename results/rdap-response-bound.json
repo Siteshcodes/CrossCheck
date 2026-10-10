@@ -1,0 +1,131 @@
+{
+  "capability": "RDAP domain provenance",
+  "cases": [
+    {
+      "input": {
+        "domain": "microsoft.com",
+        "claimed_organization": null,
+        "official_domain": null,
+        "dataset_origin": "live_public_rdap",
+        "normalized_domain": "microsoft.com"
+      },
+      "raw_evidence": [
+        {
+          "requested_url": "https://data.iana.org/rdap/dns.json",
+          "retrieved_at_utc": "2026-10-08T15:28:55.022726+00:00",
+          "redirects": [],
+          "http_status": 200,
+          "response_headers": [
+            [
+              "Date",
+              "Thu, 08 Oct 2026 15:28:55 GMT"
+            ],
+            [
+              "Content-Type",
+              "application/json"
+            ],
+            [
+              "Transfer-Encoding",
+              "chunked"
+            ],
+            [
+              "Connection",
+              "close"
+            ],
+            [
+              "Server",
+              "cloudflare"
+            ],
+            [
+              "Access-Control-Allow-Origin",
+              "*"
+            ],
+            [
+              "Vary",
+              "Accept-Encoding"
+            ],
+            [
+              "Last-Modified",
+              "Wed, 30 Sep 2026 23:00:03 GMT"
+            ],
+            [
+              "cf-cache-status",
+              "HIT"
+            ],
+            [
+              "Age",
+              "16026"
+            ],
+            [
+              "Cache-Control",
+              "max-age=86400"
+            ],
+            [
+              "Expires",
+              "Fri, 09 Oct 2026 11:01:48 GMT"
+            ],
+            [
+              "ETag",
+              "W/\"116a6-65cbb4267c2c0-br\""
+            ],
+            [
+              "X-Frame-Options",
+              "SAMEORIGIN"
+            ],
+            [
+              "Referrer-Policy",
+              "origin-when-cross-origin"
+            ],
+            [
+              "Strict-Transport-Security",
+              "max-age=48211200; preload"
+            ],
+            [
+              "CF-RAY",
+              "a4762d97ef370aea-DEL"
+            ],
+            [
+              "alt-svc",
+              "h3=\":443\"; ma=86400"
+            ]
+          ],
+          "raw_body": "{\n  \"description\": \"RDAP bootstrap file for Domain Name System registrations\",\n  \"publication\": \"202",
+          "error": {
+            "type": "ProbeError",
+            "message": "Response exceeded --max-bytes; evidence incomplete"
+          },
+          "final_url": "https://data.iana.org/rdap/dns.json",
+          "body_truncated": true,
+          "captured_bytes": 100,
+          "captured_sha256": "feb81185739917c518aef61a2d18042f08c56b807f698459de3121d37b29a949",
+          "raw_body_base64": "ewogICJkZXNjcmlwdGlvbiI6ICJSREFQIGJvb3RzdHJhcCBmaWxlIGZvciBEb21haW4gTmFtZSBTeXN0ZW0gcmVnaXN0cmF0aW9ucyIsCiAgInB1YmxpY2F0aW9uIjogIjIwMg==",
+          "latency_ms": 64.916
+        }
+      ],
+      "source": {
+        "bootstrap_url": "https://data.iana.org/rdap/dns.json"
+      },
+      "latency_ms": 65.038,
+      "result": {
+        "evidence_state": "NO_AUTHORITATIVE_DATA"
+      },
+      "confidence_boundary": [
+        "PASS requires a real domain RDAP record, usable registration date, and a named registrar. This is metadata feasibility, not a scam verdict.",
+        "RDAP records current registration metadata; registration age is not proof of ownership continuity, sender identity, or legitimacy.",
+        "Registry responses can redact registrants. Registrar identity is not registrant identity. No registrar referral or historical WHOIS lookup is performed.",
+        "The exact supplied domain is queried. A subdomain is not silently replaced with a registrable parent.",
+        "One selected HTTPS service, no cache/retries/hidden fallback. Timeout bounds each blocking socket operation, not total wall time."
+      ],
+      "status": "FAIL",
+      "failure_reason": "ProbeError: Response exceeded --max-bytes; evidence incomplete"
+    }
+  ],
+  "latency_ms": 86.194,
+  "summary": {
+    "passed": 0,
+    "failed": 1,
+    "total": 1
+  },
+  "status": "FAIL",
+  "failure_reason": "One or more cases lacked required evidence; inspect each case failure_reason"
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "case": "rdap-invalid-input",
+    "expected_fail_observed": true,
+    "failure_reason": "ProbeError: Invalid DNS label in supplied domain",
+    "latency_ms": 0.068
+  },
+  {
+    "case": "rdap-http-404",
+    "expected_fail_observed": true,
+    "failure_reason": "ProbeError: HTTP 404 from https://rdap.verisign.com/com/v1/domain/www.microsoft.com",
+    "latency_ms": 622.069
+  },
+  {
+    "case": "rdap-response-bound",
+    "expected_fail_observed": true,
+    "failure_reason": "ProbeError: Response exceeded --max-bytes; evidence incomplete",
+    "latency_ms": 65.038
+  },
+  {
+    "case": "rdap-timeout",
+    "expected_fail_observed": true,
+    "failure_reason": "URLError: <urlopen error _ssl.c:1064: The handshake operation timed out>",
+    "latency_ms": 52.636
+  }
+]

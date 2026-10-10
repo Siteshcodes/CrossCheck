@@ -1,0 +1,603 @@
+{
+  "capability": "deterministic_scam_process_contradictions",
+  "status": "PASS",
+  "latency_ms": 19.286,
+  "failure_reason": null,
+  "evidence": {
+    "dataset_origin": "synthetic_self_test",
+    "network_requests": 0,
+    "live_policy_verified": false
+  },
+  "checks": [
+    {
+      "id": "upfront_payment:CONTRADICTED",
+      "expected": "CONTRADICTED",
+      "actual": "CONTRADICTED",
+      "raw_fixture": {
+        "id": "upfront_payment:CONTRADICTED",
+        "kind": "upfront_payment",
+        "policy": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "source_url": "https://synthetic.invalid/policy",
+          "quote": "Synthetic policy text.",
+          "fact": {
+            "allowed": false
+          }
+        },
+        "observation": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "raw_text": "Synthetic observation text.",
+          "excerpt": "Synthetic observation text.",
+          "fact": {
+            "requested": true
+          }
+        }
+      },
+      "case_passed": true,
+      "evidence_state": "NO_AUTHORITATIVE_DATA",
+      "status": "PASS",
+      "latency_ms": 0.024,
+      "failure_reason": null
+    },
+    {
+      "id": "upfront_payment:NO_CONTRADICTION_FOUND",
+      "expected": "NO_CONTRADICTION_FOUND",
+      "actual": "NO_CONTRADICTION_FOUND",
+      "raw_fixture": {
+        "id": "upfront_payment:NO_CONTRADICTION_FOUND",
+        "kind": "upfront_payment",
+        "policy": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "source_url": "https://synthetic.invalid/policy",
+          "quote": "Synthetic policy text.",
+          "fact": {
+            "allowed": false
+          }
+        },
+        "observation": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "raw_text": "Synthetic observation text.",
+          "excerpt": "Synthetic observation text.",
+          "fact": {
+            "requested": false
+          }
+        }
+      },
+      "case_passed": true,
+      "evidence_state": "NO_AUTHORITATIVE_DATA",
+      "status": "PASS",
+      "latency_ms": 0.011,
+      "failure_reason": null
+    },
+    {
+      "id": "urgent_transfer:CONTRADICTED",
+      "expected": "CONTRADICTED",
+      "actual": "CONTRADICTED",
+      "raw_fixture": {
+        "id": "urgent_transfer:CONTRADICTED",
+        "kind": "urgent_transfer",
+        "policy": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "source_url": "https://synthetic.invalid/policy",
+          "quote": "Synthetic policy text.",
+          "fact": {
+            "allowed": false
+          }
+        },
+        "observation": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "raw_text": "Synthetic observation text.",
+          "excerpt": "Synthetic observation text.",
+          "fact": {
+            "requested": true
+          }
+        }
+      },
+      "case_passed": true,
+      "evidence_state": "NO_AUTHORITATIVE_DATA",
+      "status": "PASS",
+      "latency_ms": 0.008,
+      "failure_reason": null
+    },
+    {
+      "id": "urgent_transfer:NO_CONTRADICTION_FOUND",
+      "expected": "NO_CONTRADICTION_FOUND",
+      "actual": "NO_CONTRADICTION_FOUND",
+      "raw_fixture": {
+        "id": "urgent_transfer:NO_CONTRADICTION_FOUND",
+        "kind": "urgent_transfer",
+        "policy": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "source_url": "https://synthetic.invalid/policy",
+          "quote": "Synthetic policy text.",
+          "fact": {
+            "allowed": false
+          }
+        },
+        "observation": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "raw_text": "Synthetic observation text.",
+          "excerpt": "Synthetic observation text.",
+          "fact": {
+            "requested": false
+          }
+        }
+      },
+      "case_passed": true,
+      "evidence_state": "NO_AUTHORITATIVE_DATA",
+      "status": "PASS",
+      "latency_ms": 0.006,
+      "failure_reason": null
+    },
+    {
+      "id": "payment_channel:CONTRADICTED",
+      "expected": "CONTRADICTED",
+      "actual": "CONTRADICTED",
+      "raw_fixture": {
+        "id": "payment_channel:CONTRADICTED",
+        "kind": "payment_channel",
+        "policy": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "source_url": "https://synthetic.invalid/policy",
+          "quote": "Synthetic policy text.",
+          "fact": {
+            "forbidden": [
+              "gift_card"
+            ]
+          }
+        },
+        "observation": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "raw_text": "Synthetic observation text.",
+          "excerpt": "Synthetic observation text.",
+          "fact": {
+            "requested": [
+              "gift_card"
+            ]
+          }
+        }
+      },
+      "case_passed": true,
+      "evidence_state": "NO_AUTHORITATIVE_DATA",
+      "status": "PASS",
+      "latency_ms": 0.063,
+      "failure_reason": null
+    },
+    {
+      "id": "payment_channel:NO_CONTRADICTION_FOUND",
+      "expected": "NO_CONTRADICTION_FOUND",
+      "actual": "NO_CONTRADICTION_FOUND",
+      "raw_fixture": {
+        "id": "payment_channel:NO_CONTRADICTION_FOUND",
+        "kind": "payment_channel",
+        "policy": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "source_url": "https://synthetic.invalid/policy",
+          "quote": "Synthetic policy text.",
+          "fact": {
+            "forbidden": [
+              "gift_card"
+            ]
+          }
+        },
+        "observation": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "raw_text": "Synthetic observation text.",
+          "excerpt": "Synthetic observation text.",
+          "fact": {
+            "requested": [
+              "bank_transfer"
+            ]
+          }
+        }
+      },
+      "case_passed": true,
+      "evidence_state": "NO_AUTHORITATIVE_DATA",
+      "status": "PASS",
+      "latency_ms": 0.012,
+      "failure_reason": null
+    },
+    {
+      "id": "credential_request:CONTRADICTED",
+      "expected": "CONTRADICTED",
+      "actual": "CONTRADICTED",
+      "raw_fixture": {
+        "id": "credential_request:CONTRADICTED",
+        "kind": "credential_request",
+        "policy": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "source_url": "https://synthetic.invalid/policy",
+          "quote": "Synthetic policy text.",
+          "fact": {
+            "forbidden": [
+              "otp",
+              "password"
+            ]
+          }
+        },
+        "observation": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "raw_text": "Synthetic observation text.",
+          "excerpt": "Synthetic observation text.",
+          "fact": {
+            "requested": [
+              "otp"
+            ]
+          }
+        }
+      },
+      "case_passed": true,
+      "evidence_state": "NO_AUTHORITATIVE_DATA",
+      "status": "PASS",
+      "latency_ms": 0.01,
+      "failure_reason": null
+    },
+    {
+      "id": "credential_request:NO_CONTRADICTION_FOUND",
+      "expected": "NO_CONTRADICTION_FOUND",
+      "actual": "NO_CONTRADICTION_FOUND",
+      "raw_fixture": {
+        "id": "credential_request:NO_CONTRADICTION_FOUND",
+        "kind": "credential_request",
+        "policy": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "source_url": "https://synthetic.invalid/policy",
+          "quote": "Synthetic policy text.",
+          "fact": {
+            "forbidden": [
+              "otp",
+              "password"
+            ]
+          }
+        },
+        "observation": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "raw_text": "Synthetic observation text.",
+          "excerpt": "Synthetic observation text.",
+          "fact": {
+            "requested": []
+          }
+        }
+      },
+      "case_passed": true,
+      "evidence_state": "NO_AUTHORITATIVE_DATA",
+      "status": "PASS",
+      "latency_ms": 0.007,
+      "failure_reason": null
+    },
+    {
+      "id": "interview_requirement:CONTRADICTED",
+      "expected": "CONTRADICTED",
+      "actual": "CONTRADICTED",
+      "raw_fixture": {
+        "id": "interview_requirement:CONTRADICTED",
+        "kind": "interview_requirement",
+        "policy": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "source_url": "https://synthetic.invalid/policy",
+          "quote": "Synthetic policy text.",
+          "fact": {
+            "required": true
+          }
+        },
+        "observation": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "raw_text": "Synthetic observation text.",
+          "excerpt": "Synthetic observation text.",
+          "fact": {
+            "required": false
+          }
+        }
+      },
+      "case_passed": true,
+      "evidence_state": "NO_AUTHORITATIVE_DATA",
+      "status": "PASS",
+      "latency_ms": 0.006,
+      "failure_reason": null
+    },
+    {
+      "id": "interview_requirement:NO_CONTRADICTION_FOUND",
+      "expected": "NO_CONTRADICTION_FOUND",
+      "actual": "NO_CONTRADICTION_FOUND",
+      "raw_fixture": {
+        "id": "interview_requirement:NO_CONTRADICTION_FOUND",
+        "kind": "interview_requirement",
+        "policy": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "source_url": "https://synthetic.invalid/policy",
+          "quote": "Synthetic policy text.",
+          "fact": {
+            "required": true
+          }
+        },
+        "observation": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "raw_text": "Synthetic observation text.",
+          "excerpt": "Synthetic observation text.",
+          "fact": {
+            "required": true
+          }
+        }
+      },
+      "case_passed": true,
+      "evidence_state": "NO_AUTHORITATIVE_DATA",
+      "status": "PASS",
+      "latency_ms": 0.005,
+      "failure_reason": null
+    },
+    {
+      "id": "scope_mismatch",
+      "expected": "INSUFFICIENT",
+      "actual": "INSUFFICIENT",
+      "raw_fixture": {
+        "id": "synthetic",
+        "kind": "upfront_payment",
+        "policy": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "source_url": "https://synthetic.invalid/policy",
+          "quote": "Synthetic policy text.",
+          "fact": {
+            "allowed": false
+          }
+        },
+        "observation": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "OTHER",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "raw_text": "Synthetic observation text.",
+          "excerpt": "Synthetic observation text.",
+          "fact": {
+            "requested": true
+          }
+        }
+      },
+      "rejection_reason": null,
+      "case_passed": true,
+      "evidence_state": "NO_AUTHORITATIVE_DATA",
+      "status": "PASS",
+      "latency_ms": 0.006,
+      "failure_reason": null
+    },
+    {
+      "id": "unknown_null",
+      "expected": "REJECTED",
+      "actual": "REJECTED",
+      "raw_fixture": {
+        "id": "synthetic",
+        "kind": "upfront_payment",
+        "policy": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "source_url": "https://synthetic.invalid/policy",
+          "quote": "Synthetic policy text.",
+          "fact": {
+            "allowed": false
+          }
+        },
+        "observation": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "raw_text": "Synthetic observation text.",
+          "excerpt": "Synthetic observation text.",
+          "fact": {
+            "requested": null
+          }
+        }
+      },
+      "rejection_reason": "observation.fact.requested must be true or false; unknown/null is insufficient evidence",
+      "case_passed": true,
+      "evidence_state": "NO_AUTHORITATIVE_DATA",
+      "status": "PASS",
+      "latency_ms": 0.007,
+      "failure_reason": null
+    },
+    {
+      "id": "excerpt_missing",
+      "expected": "REJECTED",
+      "actual": "REJECTED",
+      "raw_fixture": {
+        "id": "synthetic",
+        "kind": "upfront_payment",
+        "policy": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "source_url": "https://synthetic.invalid/policy",
+          "quote": "Synthetic policy text.",
+          "fact": {
+            "allowed": false
+          }
+        },
+        "observation": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "raw_text": "Synthetic observation text.",
+          "excerpt": "Absent text.",
+          "fact": {
+            "requested": true
+          }
+        }
+      },
+      "rejection_reason": "observation.excerpt does not occur in observation.raw_text",
+      "case_passed": true,
+      "evidence_state": "NO_AUTHORITATIVE_DATA",
+      "status": "PASS",
+      "latency_ms": 0.005,
+      "failure_reason": null
+    },
+    {
+      "id": "malformed_fact",
+      "expected": "REJECTED",
+      "actual": "REJECTED",
+      "raw_fixture": {
+        "id": "synthetic",
+        "kind": "upfront_payment",
+        "policy": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "source_url": "https://synthetic.invalid/policy",
+          "quote": "Synthetic policy text.",
+          "fact": {
+            "allowed": "false"
+          }
+        },
+        "observation": {
+          "scope": {
+            "organization": "SYNTHETIC",
+            "process": "SYNTHETIC",
+            "stage": "SYNTHETIC",
+            "jurisdiction": "SYNTHETIC"
+          },
+          "raw_text": "Synthetic observation text.",
+          "excerpt": "Synthetic observation text.",
+          "fact": {
+            "requested": true
+          }
+        }
+      },
+      "rejection_reason": "policy.fact.allowed must be true or false; unknown/null is insufficient evidence",
+      "case_passed": true,
+      "evidence_state": "NO_AUTHORITATIVE_DATA",
+      "status": "PASS",
+      "latency_ms": 0.005,
+      "failure_reason": null
+    }
+  ],
+  "evidence_state": "NO_AUTHORITATIVE_DATA",
+  "limitations": [
+    "PASS measures evidence retrieval and explicit fact comparison, not whether a message is a scam or safe.",
+    "An operator must independently choose authoritative hosts and correctly interpret policy scope, quote, and observation facts. Quote presence does not verify that interpretation.",
+    "Scopes must match exactly. No fuzzy matching, text inference, urgency scoring, or universal payment/interview/credential rule is used.",
+    "Live HTTPS HTML/plain-text only; blocked pages, HTTP errors, unsupported content, and missing quotes fail visibly. Dynamic-only text and PDFs are unsupported.",
+    "Observation text is supplied by the operator and its authenticity is not verified. Synthetic examples cannot establish real-world detection accuracy.",
+    "Bank credential comparisons concern disclosure to a caller; they do not prohibit entering an OTP/password into the bank's own legitimate authentication flow.",
+    "The police example concerns immediate money pressure during a claimed investigation; it does not classify every government fee, fine, or transfer as illegitimate."
+  ]
+}

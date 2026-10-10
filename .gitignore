@@ -1,0 +1,21 @@
+.env
+.env.*
+!.env.example
+*.key
+original_msg.eml
+
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+web/node_modules/
+web/dist/
+
+.DS_Store
+Thumbs.db
+# Private local validation artifacts
+original_msg.eml
+results/*real-email*
+results/hardening-rerun.json
+web/tsconfig.tsbuildinfo

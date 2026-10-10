@@ -1,0 +1,7 @@
+X-Fixture-Notice: SYNTHETIC UNIT TEST ONLY; no actual SPF/DKIM/DMARC verification
+Authentication-Results: mx.receiver.example; spf=pass smtp.mailfrom=alerts@attacker.example; dkim=pass header.d=attacker.example header.s=synthetic; dmarc=pass header.from=attacker.example
+From: Example Foundation <alerts@attacker.example>
+To: recipient@receiver.example
+Subject: Synthetic display-name impersonation scenario
+
+Invented fixture: authentication may pass for an attacker's own domain.

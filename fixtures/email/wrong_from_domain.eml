@@ -1,0 +1,7 @@
+X-Fixture-Notice: SYNTHETIC UNIT TEST ONLY; no actual SPF/DKIM/DMARC verification
+Authentication-Results: mx.receiver.example; spf=fail smtp.mailfrom=notices@lookalike.example; dkim=none; dmarc=fail header.from=lookalike.example
+From: Accounts Team <notices@lookalike.example>
+To: recipient@receiver.example
+Subject: Synthetic wrong From domain scenario
+
+Invented fixture: caller claims Example Foundation but From domain differs.

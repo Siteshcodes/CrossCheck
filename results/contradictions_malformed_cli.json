@@ -1,0 +1,18 @@
+{
+  "capability": "deterministic_scam_process_contradictions",
+  "status": "FAIL",
+  "latency_ms": 19.52,
+  "failure_reason": "InputError: unrecognized arguments: --bad-argument",
+  "evidence": {},
+  "checks": [],
+  "evidence_state": "NO_AUTHORITATIVE_DATA",
+  "limitations": [
+    "PASS measures evidence retrieval and explicit fact comparison, not whether a message is a scam or safe.",
+    "An operator must independently choose authoritative hosts and correctly interpret policy scope, quote, and observation facts. Quote presence does not verify that interpretation.",
+    "Scopes must match exactly. No fuzzy matching, text inference, urgency scoring, or universal payment/interview/credential rule is used.",
+    "Live HTTPS HTML/plain-text only; blocked pages, HTTP errors, unsupported content, and missing quotes fail visibly. Dynamic-only text and PDFs are unsupported.",
+    "Observation text is supplied by the operator and its authenticity is not verified. Synthetic examples cannot establish real-world detection accuracy.",
+    "Bank credential comparisons concern disclosure to a caller; they do not prohibit entering an OTP/password into the bank's own legitimate authentication flow.",
+    "The police example concerns immediate money pressure during a claimed investigation; it does not classify every government fee, fine, or transfer as illegitimate."
+  ]
+}

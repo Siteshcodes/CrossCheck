@@ -1,0 +1,1296 @@
+{
+  "capability": "email_header_analysis_synthetic_fixture_suite",
+  "input": {
+    "mode": "synthetic_unit_tests",
+    "fixture_directory": "D:\\8.Hackthon\\forge-kill-tests\\fixtures\\email"
+  },
+  "raw_evidence": {
+    "cases": [
+      {
+        "capability": "email_header_analysis",
+        "input": {
+          "eml": "D:\\8.Hackthon\\forge-kill-tests\\fixtures\\email\\legitimate_aligned.eml",
+          "claimed_organization": "Example Foundation",
+          "official_domain": "example.org"
+        },
+        "raw_evidence": {
+          "network_requests": [],
+          "input_path": "D:\\8.Hackthon\\forge-kill-tests\\fixtures\\email\\legitimate_aligned.eml",
+          "raw_headers": "X-Fixture-Notice: SYNTHETIC UNIT TEST ONLY; no actual SPF/DKIM/DMARC verification\nAuthentication-Results: mx.receiver.example; spf=pass smtp.mailfrom=notices@example.org; dkim=pass header.d=example.org header.s=synthetic; dmarc=pass header.from=example.org\nFrom: Example Foundation <notices@example.org>\nTo: recipient@receiver.example\nSubject: Synthetic aligned domain scenario\n\n",
+          "raw_headers_encoding": "latin-1 byte-preserving representation; base64 is exact",
+          "raw_headers_base64": "WC1GaXh0dXJlLU5vdGljZTogU1lOVEhFVElDIFVOSVQgVEVTVCBPTkxZOyBubyBhY3R1YWwgU1BGL0RLSU0vRE1BUkMgdmVyaWZpY2F0aW9uCkF1dGhlbnRpY2F0aW9uLVJlc3VsdHM6IG14LnJlY2VpdmVyLmV4YW1wbGU7IHNwZj1wYXNzIHNtdHAubWFpbGZyb209bm90aWNlc0BleGFtcGxlLm9yZzsgZGtpbT1wYXNzIGhlYWRlci5kPWV4YW1wbGUub3JnIGhlYWRlci5zPXN5bnRoZXRpYzsgZG1hcmM9cGFzcyBoZWFkZXIuZnJvbT1leGFtcGxlLm9yZwpGcm9tOiBFeGFtcGxlIEZvdW5kYXRpb24gPG5vdGljZXNAZXhhbXBsZS5vcmc+ClRvOiByZWNpcGllbnRAcmVjZWl2ZXIuZXhhbXBsZQpTdWJqZWN0OiBTeW50aGV0aWMgYWxpZ25lZCBkb21haW4gc2NlbmFyaW8KCg==",
+          "header_sha256": "935a3aa28738c45691ec902d402c71fce37ab867a7a46c0ca8e80964dd9e9bcd",
+          "header_bytes": 379,
+          "header_body_separator_present": true,
+          "body_read": false,
+          "raw_headers_complete": true,
+          "authentication_results": [
+            {
+              "raw_value": "mx.receiver.example; spf=pass smtp.mailfrom=notices@example.org; dkim=pass header.d=example.org header.s=synthetic; dmarc=pass header.from=example.org",
+              "parsed": {
+                "authserv_id": "mx.receiver.example",
+                "version": "1",
+                "results": [
+                  {
+                    "method": "spf",
+                    "version": "1",
+                    "result": "pass",
+                    "properties": {
+                      "smtp.mailfrom": "notices@example.org"
+                    }
+                  },
+                  {
+                    "method": "dkim",
+                    "version": "1",
+                    "result": "pass",
+                    "properties": {
+                      "header.d": "example.org",
+                      "header.s": "synthetic"
+                    }
+                  },
+                  {
+                    "method": "dmarc",
+                    "version": "1",
+                    "result": "pass",
+                    "properties": {
+                      "header.from": "example.org"
+                    }
+                  }
+                ]
+              },
+              "parse_error": null
+            }
+          ],
+          "related_headers": {
+            "From": [
+              "Example Foundation <notices@example.org>"
+            ],
+            "Reply-To": [],
+            "Return-Path": [],
+            "Received": [],
+            "Received-SPF": [],
+            "DKIM-Signature": [],
+            "ARC-Authentication-Results": []
+          },
+          "trust_configuration": {
+            "trusted_authserv_id": "mx.receiver.example",
+            "trusted_receiver_export_asserted": true,
+            "provenance_verified_by_script": false
+          },
+          "from_mailbox": "notices@example.org",
+          "from_domain": "example.org",
+          "from_display_name": "Example Foundation",
+          "organization_claim_comparison": {
+            "claimed_organization": "Example Foundation",
+            "configured_official_domain": "example.org",
+            "from_domain_matches_official_domain": true,
+            "display_name_contains_claimed_organization": true,
+            "display_name_spoof_indicator": false,
+            "finding": "domain_consistent_with_configuration",
+            "authority": "caller_configuration_only"
+          },
+          "receiver_reported_results": {
+            "spf": [
+              {
+                "method": "spf",
+                "version": "1",
+                "result": "pass",
+                "properties": {
+                  "smtp.mailfrom": "notices@example.org"
+                }
+              }
+            ],
+            "dkim": [
+              {
+                "method": "dkim",
+                "version": "1",
+                "result": "pass",
+                "properties": {
+                  "header.d": "example.org",
+                  "header.s": "synthetic"
+                }
+              }
+            ],
+            "dmarc": [
+              {
+                "method": "dmarc",
+                "version": "1",
+                "result": "pass",
+                "properties": {
+                  "header.from": "example.org"
+                }
+              }
+            ]
+          }
+        },
+        "source": {
+          "kind": "SYNTHETIC_UNIT_TEST_FIXTURE",
+          "path": "D:\\8.Hackthon\\forge-kill-tests\\fixtures\\email\\legitimate_aligned.eml",
+          "independently_authenticated": false
+        },
+        "latency_ms": 51.344,
+        "result": {
+          "evidence_state": "CONSISTENT_BUT_NOT_IDENTITY_PROVING",
+          "authentication_outcome": "receiver_reported_dmarc_pass",
+          "spf_outcome": "pass",
+          "dkim_outcomes": [
+            "pass"
+          ],
+          "dmarc_outcome": "pass",
+          "independent_authentication_performed": false,
+          "organization_claim": {
+            "claimed_organization": "Example Foundation",
+            "configured_official_domain": "example.org",
+            "from_domain_matches_official_domain": true,
+            "display_name_contains_claimed_organization": true,
+            "display_name_spoof_indicator": false,
+            "finding": "domain_consistent_with_configuration",
+            "authority": "caller_configuration_only"
+          },
+          "scam_verdict": "not_determined"
+        },
+        "confidence_boundary": {
+          "live_crypto_verified": false,
+          "synthetic_input": true,
+          "limitations": [
+            "PASS means this input supplied complete, interpretable receiver-reported evidence; it does not mean the email is safe or authentic.",
+            "No SPF DNS evaluation, DKIM cryptographic verification, DMARC policy lookup, or network requests are performed.",
+            "Trust is a caller assertion: use an original export from a known receiver that strips spoofed Authentication-Results for its own authserv-id. An authserv-id match alone is forgeable.",
+            "Only outer message headers are read. Forwarded/attached headers, screenshots, and copied sender-provided headers are not trusted exports.",
+            "Conservative syntax subset: ASCII Authentication-Results, version 1, compact property names (header.from), exactly one matching trusted header, one SPF and DMARC result; multiple DKIM results are preserved. Other layouts fail closed.",
+            "Receiver-reported DMARC is used; relaxed alignment and organizational domains are not independently calculated.",
+            "A single message cannot establish population-level accuracy or reliability. Test a labeled set of real receiver exports separately.",
+            "Organization names and official domains are caller configuration, not independently verified authoritative identities; display names never establish identity.",
+            "Domains must be ASCII or explicit IDNA2008 A-labels (xn--). Unicode domains fail closed rather than using Python's older IDNA mapping."
+          ]
+        },
+        "status": "PASS",
+        "failure_reason": null,
+        "checks": [
+          {
+            "name": "header_structure",
+            "status": "PASS"
+          },
+          {
+            "name": "receiver_trust",
+            "status": "PASS",
+            "basis": "Explicit caller assertion and exact authserv-id match; provenance not independently verified"
+          },
+          {
+            "name": "spf_result_available",
+            "status": "PASS",
+            "reported_results": [
+              "pass"
+            ]
+          },
+          {
+            "name": "dkim_result_available",
+            "status": "PASS",
+            "reported_results": [
+              "pass"
+            ]
+          },
+          {
+            "name": "dmarc_result_available",
+            "status": "PASS",
+            "reported_results": [
+              "pass"
+            ]
+          },
+          {
+            "name": "dmarc_from_identity",
+            "status": "PASS",
+            "domain": "example.org"
+          }
+        ],
+        "test_expectation": {
+          "case_passed": true,
+          "assertions": [
+            {
+              "field": "status",
+              "expected": "PASS",
+              "actual": "PASS",
+              "passed": true
+            },
+            {
+              "field": "spf",
+              "expected": "pass",
+              "actual": "pass",
+              "passed": true
+            },
+            {
+              "field": "dmarc",
+              "expected": "pass",
+              "actual": "pass",
+              "passed": true
+            },
+            {
+              "field": "domain_match",
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "field": "display_spoof",
+              "expected": false,
+              "actual": false,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "capability": "email_header_analysis",
+        "input": {
+          "eml": "D:\\8.Hackthon\\forge-kill-tests\\fixtures\\email\\display_name_spoof.eml",
+          "claimed_organization": "Example Foundation",
+          "official_domain": "example.org"
+        },
+        "raw_evidence": {
+          "network_requests": [],
+          "input_path": "D:\\8.Hackthon\\forge-kill-tests\\fixtures\\email\\display_name_spoof.eml",
+          "raw_headers": "X-Fixture-Notice: SYNTHETIC UNIT TEST ONLY; no actual SPF/DKIM/DMARC verification\nAuthentication-Results: mx.receiver.example; spf=pass smtp.mailfrom=alerts@attacker.example; dkim=pass header.d=attacker.example header.s=synthetic; dmarc=pass header.from=attacker.example\nFrom: Example Foundation <alerts@attacker.example>\nTo: recipient@receiver.example\nSubject: Synthetic display-name impersonation scenario\n\n",
+          "raw_headers_encoding": "latin-1 byte-preserving representation; base64 is exact",
+          "raw_headers_base64": "WC1GaXh0dXJlLU5vdGljZTogU1lOVEhFVElDIFVOSVQgVEVTVCBPTkxZOyBubyBhY3R1YWwgU1BGL0RLSU0vRE1BUkMgdmVyaWZpY2F0aW9uCkF1dGhlbnRpY2F0aW9uLVJlc3VsdHM6IG14LnJlY2VpdmVyLmV4YW1wbGU7IHNwZj1wYXNzIHNtdHAubWFpbGZyb209YWxlcnRzQGF0dGFja2VyLmV4YW1wbGU7IGRraW09cGFzcyBoZWFkZXIuZD1hdHRhY2tlci5leGFtcGxlIGhlYWRlci5zPXN5bnRoZXRpYzsgZG1hcmM9cGFzcyBoZWFkZXIuZnJvbT1hdHRhY2tlci5leGFtcGxlCkZyb206IEV4YW1wbGUgRm91bmRhdGlvbiA8YWxlcnRzQGF0dGFja2VyLmV4YW1wbGU+ClRvOiByZWNpcGllbnRAcmVjZWl2ZXIuZXhhbXBsZQpTdWJqZWN0OiBTeW50aGV0aWMgZGlzcGxheS1uYW1lIGltcGVyc29uYXRpb24gc2NlbmFyaW8KCg==",
+          "header_sha256": "b29e46348ae05f24eeaf498379821b15254860bc80a5a1d4e9ecb713f8b1baca",
+          "header_bytes": 409,
+          "header_body_separator_present": true,
+          "body_read": false,
+          "raw_headers_complete": true,
+          "authentication_results": [
+            {
+              "raw_value": "mx.receiver.example; spf=pass smtp.mailfrom=alerts@attacker.example; dkim=pass header.d=attacker.example header.s=synthetic; dmarc=pass header.from=attacker.example",
+              "parsed": {
+                "authserv_id": "mx.receiver.example",
+                "version": "1",
+                "results": [
+                  {
+                    "method": "spf",
+                    "version": "1",
+                    "result": "pass",
+                    "properties": {
+                      "smtp.mailfrom": "alerts@attacker.example"
+                    }
+                  },
+                  {
+                    "method": "dkim",
+                    "version": "1",
+                    "result": "pass",
+                    "properties": {
+                      "header.d": "attacker.example",
+                      "header.s": "synthetic"
+                    }
+                  },
+                  {
+                    "method": "dmarc",
+                    "version": "1",
+                    "result": "pass",
+                    "properties": {
+                      "header.from": "attacker.example"
+                    }
+                  }
+                ]
+              },
+              "parse_error": null
+            }
+          ],
+          "related_headers": {
+            "From": [
+              "Example Foundation <alerts@attacker.example>"
+            ],
+            "Reply-To": [],
+            "Return-Path": [],
+            "Received": [],
+            "Received-SPF": [],
+            "DKIM-Signature": [],
+            "ARC-Authentication-Results": []
+          },
+          "trust_configuration": {
+            "trusted_authserv_id": "mx.receiver.example",
+            "trusted_receiver_export_asserted": true,
+            "provenance_verified_by_script": false
+          },
+          "from_mailbox": "alerts@attacker.example",
+          "from_domain": "attacker.example",
+          "from_display_name": "Example Foundation",
+          "organization_claim_comparison": {
+            "claimed_organization": "Example Foundation",
+            "configured_official_domain": "example.org",
+            "from_domain_matches_official_domain": false,
+            "display_name_contains_claimed_organization": true,
+            "display_name_spoof_indicator": true,
+            "finding": "domain_conflicts_with_claimed_organization_configuration",
+            "authority": "caller_configuration_only"
+          },
+          "receiver_reported_results": {
+            "spf": [
+              {
+                "method": "spf",
+                "version": "1",
+                "result": "pass",
+                "properties": {
+                  "smtp.mailfrom": "alerts@attacker.example"
+                }
+              }
+            ],
+            "dkim": [
+              {
+                "method": "dkim",
+                "version": "1",
+                "result": "pass",
+                "properties": {
+                  "header.d": "attacker.example",
+                  "header.s": "synthetic"
+                }
+              }
+            ],
+            "dmarc": [
+              {
+                "method": "dmarc",
+                "version": "1",
+                "result": "pass",
+                "properties": {
+                  "header.from": "attacker.example"
+                }
+              }
+            ]
+          }
+        },
+        "source": {
+          "kind": "SYNTHETIC_UNIT_TEST_FIXTURE",
+          "path": "D:\\8.Hackthon\\forge-kill-tests\\fixtures\\email\\display_name_spoof.eml",
+          "independently_authenticated": false
+        },
+        "latency_ms": 32.261,
+        "result": {
+          "evidence_state": "CONSISTENT_BUT_NOT_IDENTITY_PROVING",
+          "authentication_outcome": "receiver_reported_dmarc_pass",
+          "spf_outcome": "pass",
+          "dkim_outcomes": [
+            "pass"
+          ],
+          "dmarc_outcome": "pass",
+          "independent_authentication_performed": false,
+          "organization_claim": {
+            "claimed_organization": "Example Foundation",
+            "configured_official_domain": "example.org",
+            "from_domain_matches_official_domain": false,
+            "display_name_contains_claimed_organization": true,
+            "display_name_spoof_indicator": true,
+            "finding": "domain_conflicts_with_claimed_organization_configuration",
+            "authority": "caller_configuration_only"
+          },
+          "scam_verdict": "not_determined"
+        },
+        "confidence_boundary": {
+          "live_crypto_verified": false,
+          "synthetic_input": true,
+          "limitations": [
+            "PASS means this input supplied complete, interpretable receiver-reported evidence; it does not mean the email is safe or authentic.",
+            "No SPF DNS evaluation, DKIM cryptographic verification, DMARC policy lookup, or network requests are performed.",
+            "Trust is a caller assertion: use an original export from a known receiver that strips spoofed Authentication-Results for its own authserv-id. An authserv-id match alone is forgeable.",
+            "Only outer message headers are read. Forwarded/attached headers, screenshots, and copied sender-provided headers are not trusted exports.",
+            "Conservative syntax subset: ASCII Authentication-Results, version 1, compact property names (header.from), exactly one matching trusted header, one SPF and DMARC result; multiple DKIM results are preserved. Other layouts fail closed.",
+            "Receiver-reported DMARC is used; relaxed alignment and organizational domains are not independently calculated.",
+            "A single message cannot establish population-level accuracy or reliability. Test a labeled set of real receiver exports separately.",
+            "Organization names and official domains are caller configuration, not independently verified authoritative identities; display names never establish identity.",
+            "Domains must be ASCII or explicit IDNA2008 A-labels (xn--). Unicode domains fail closed rather than using Python's older IDNA mapping."
+          ]
+        },
+        "status": "PASS",
+        "failure_reason": null,
+        "checks": [
+          {
+            "name": "header_structure",
+            "status": "PASS"
+          },
+          {
+            "name": "receiver_trust",
+            "status": "PASS",
+            "basis": "Explicit caller assertion and exact authserv-id match; provenance not independently verified"
+          },
+          {
+            "name": "spf_result_available",
+            "status": "PASS",
+            "reported_results": [
+              "pass"
+            ]
+          },
+          {
+            "name": "dkim_result_available",
+            "status": "PASS",
+            "reported_results": [
+              "pass"
+            ]
+          },
+          {
+            "name": "dmarc_result_available",
+            "status": "PASS",
+            "reported_results": [
+              "pass"
+            ]
+          },
+          {
+            "name": "dmarc_from_identity",
+            "status": "PASS",
+            "domain": "attacker.example"
+          }
+        ],
+        "test_expectation": {
+          "case_passed": true,
+          "assertions": [
+            {
+              "field": "status",
+              "expected": "PASS",
+              "actual": "PASS",
+              "passed": true
+            },
+            {
+              "field": "spf",
+              "expected": "pass",
+              "actual": "pass",
+              "passed": true
+            },
+            {
+              "field": "dmarc",
+              "expected": "pass",
+              "actual": "pass",
+              "passed": true
+            },
+            {
+              "field": "domain_match",
+              "expected": false,
+              "actual": false,
+              "passed": true
+            },
+            {
+              "field": "display_spoof",
+              "expected": true,
+              "actual": true,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "capability": "email_header_analysis",
+        "input": {
+          "eml": "D:\\8.Hackthon\\forge-kill-tests\\fixtures\\email\\wrong_from_domain.eml",
+          "claimed_organization": "Example Foundation",
+          "official_domain": "example.org"
+        },
+        "raw_evidence": {
+          "network_requests": [],
+          "input_path": "D:\\8.Hackthon\\forge-kill-tests\\fixtures\\email\\wrong_from_domain.eml",
+          "raw_headers": "X-Fixture-Notice: SYNTHETIC UNIT TEST ONLY; no actual SPF/DKIM/DMARC verification\nAuthentication-Results: mx.receiver.example; spf=fail smtp.mailfrom=notices@lookalike.example; dkim=none; dmarc=fail header.from=lookalike.example\nFrom: Accounts Team <notices@lookalike.example>\nTo: recipient@receiver.example\nSubject: Synthetic wrong From domain scenario\n\n",
+          "raw_headers_encoding": "latin-1 byte-preserving representation; base64 is exact",
+          "raw_headers_base64": "WC1GaXh0dXJlLU5vdGljZTogU1lOVEhFVElDIFVOSVQgVEVTVCBPTkxZOyBubyBhY3R1YWwgU1BGL0RLSU0vRE1BUkMgdmVyaWZpY2F0aW9uCkF1dGhlbnRpY2F0aW9uLVJlc3VsdHM6IG14LnJlY2VpdmVyLmV4YW1wbGU7IHNwZj1mYWlsIHNtdHAubWFpbGZyb209bm90aWNlc0Bsb29rYWxpa2UuZXhhbXBsZTsgZGtpbT1ub25lOyBkbWFyYz1mYWlsIGhlYWRlci5mcm9tPWxvb2thbGlrZS5leGFtcGxlCkZyb206IEFjY291bnRzIFRlYW0gPG5vdGljZXNAbG9va2FsaWtlLmV4YW1wbGU+ClRvOiByZWNpcGllbnRAcmVjZWl2ZXIuZXhhbXBsZQpTdWJqZWN0OiBTeW50aGV0aWMgd3JvbmcgRnJvbSBkb21haW4gc2NlbmFyaW8KCg==",
+          "header_sha256": "6249e641ce6566afbdda49f8b9cf92e6472fb4e8e4f3d6108657294be3c31240",
+          "header_bytes": 355,
+          "header_body_separator_present": true,
+          "body_read": false,
+          "raw_headers_complete": true,
+          "authentication_results": [
+            {
+              "raw_value": "mx.receiver.example; spf=fail smtp.mailfrom=notices@lookalike.example; dkim=none; dmarc=fail header.from=lookalike.example",
+              "parsed": {
+                "authserv_id": "mx.receiver.example",
+                "version": "1",
+                "results": [
+                  {
+                    "method": "spf",
+                    "version": "1",
+                    "result": "fail",
+                    "properties": {
+                      "smtp.mailfrom": "notices@lookalike.example"
+                    }
+                  },
+                  {
+                    "method": "dkim",
+                    "version": "1",
+                    "result": "none",
+                    "properties": {}
+                  },
+                  {
+                    "method": "dmarc",
+                    "version": "1",
+                    "result": "fail",
+                    "properties": {
+                      "header.from": "lookalike.example"
+                    }
+                  }
+                ]
+              },
+              "parse_error": null
+            }
+          ],
+          "related_headers": {
+            "From": [
+              "Accounts Team <notices@lookalike.example>"
+            ],
+            "Reply-To": [],
+            "Return-Path": [],
+            "Received": [],
+            "Received-SPF": [],
+            "DKIM-Signature": [],
+            "ARC-Authentication-Results": []
+          },
+          "trust_configuration": {
+            "trusted_authserv_id": "mx.receiver.example",
+            "trusted_receiver_export_asserted": true,
+            "provenance_verified_by_script": false
+          },
+          "from_mailbox": "notices@lookalike.example",
+          "from_domain": "lookalike.example",
+          "from_display_name": "Accounts Team",
+          "organization_claim_comparison": {
+            "claimed_organization": "Example Foundation",
+            "configured_official_domain": "example.org",
+            "from_domain_matches_official_domain": false,
+            "display_name_contains_claimed_organization": false,
+            "display_name_spoof_indicator": false,
+            "finding": "domain_conflicts_with_claimed_organization_configuration",
+            "authority": "caller_configuration_only"
+          },
+          "receiver_reported_results": {
+            "spf": [
+              {
+                "method": "spf",
+                "version": "1",
+                "result": "fail",
+                "properties": {
+                  "smtp.mailfrom": "notices@lookalike.example"
+                }
+              }
+            ],
+            "dkim": [
+              {
+                "method": "dkim",
+                "version": "1",
+                "result": "none",
+                "properties": {}
+              }
+            ],
+            "dmarc": [
+              {
+                "method": "dmarc",
+                "version": "1",
+                "result": "fail",
+                "properties": {
+                  "header.from": "lookalike.example"
+                }
+              }
+            ]
+          }
+        },
+        "source": {
+          "kind": "SYNTHETIC_UNIT_TEST_FIXTURE",
+          "path": "D:\\8.Hackthon\\forge-kill-tests\\fixtures\\email\\wrong_from_domain.eml",
+          "independently_authenticated": false
+        },
+        "latency_ms": 46.205,
+        "result": {
+          "evidence_state": "CONSISTENT_BUT_NOT_IDENTITY_PROVING",
+          "authentication_outcome": "receiver_reported_dmarc_fail",
+          "spf_outcome": "fail",
+          "dkim_outcomes": [
+            "none"
+          ],
+          "dmarc_outcome": "fail",
+          "independent_authentication_performed": false,
+          "organization_claim": {
+            "claimed_organization": "Example Foundation",
+            "configured_official_domain": "example.org",
+            "from_domain_matches_official_domain": false,
+            "display_name_contains_claimed_organization": false,
+            "display_name_spoof_indicator": false,
+            "finding": "domain_conflicts_with_claimed_organization_configuration",
+            "authority": "caller_configuration_only"
+          },
+          "scam_verdict": "not_determined"
+        },
+        "confidence_boundary": {
+          "live_crypto_verified": false,
+          "synthetic_input": true,
+          "limitations": [
+            "PASS means this input supplied complete, interpretable receiver-reported evidence; it does not mean the email is safe or authentic.",
+            "No SPF DNS evaluation, DKIM cryptographic verification, DMARC policy lookup, or network requests are performed.",
+            "Trust is a caller assertion: use an original export from a known receiver that strips spoofed Authentication-Results for its own authserv-id. An authserv-id match alone is forgeable.",
+            "Only outer message headers are read. Forwarded/attached headers, screenshots, and copied sender-provided headers are not trusted exports.",
+            "Conservative syntax subset: ASCII Authentication-Results, version 1, compact property names (header.from), exactly one matching trusted header, one SPF and DMARC result; multiple DKIM results are preserved. Other layouts fail closed.",
+            "Receiver-reported DMARC is used; relaxed alignment and organizational domains are not independently calculated.",
+            "A single message cannot establish population-level accuracy or reliability. Test a labeled set of real receiver exports separately.",
+            "Organization names and official domains are caller configuration, not independently verified authoritative identities; display names never establish identity.",
+            "Domains must be ASCII or explicit IDNA2008 A-labels (xn--). Unicode domains fail closed rather than using Python's older IDNA mapping."
+          ]
+        },
+        "status": "PASS",
+        "failure_reason": null,
+        "checks": [
+          {
+            "name": "header_structure",
+            "status": "PASS"
+          },
+          {
+            "name": "receiver_trust",
+            "status": "PASS",
+            "basis": "Explicit caller assertion and exact authserv-id match; provenance not independently verified"
+          },
+          {
+            "name": "spf_result_available",
+            "status": "PASS",
+            "reported_results": [
+              "fail"
+            ]
+          },
+          {
+            "name": "dkim_result_available",
+            "status": "PASS",
+            "reported_results": [
+              "none"
+            ]
+          },
+          {
+            "name": "dmarc_result_available",
+            "status": "PASS",
+            "reported_results": [
+              "fail"
+            ]
+          },
+          {
+            "name": "dmarc_from_identity",
+            "status": "PASS",
+            "domain": "lookalike.example"
+          }
+        ],
+        "test_expectation": {
+          "case_passed": true,
+          "assertions": [
+            {
+              "field": "status",
+              "expected": "PASS",
+              "actual": "PASS",
+              "passed": true
+            },
+            {
+              "field": "spf",
+              "expected": "fail",
+              "actual": "fail",
+              "passed": true
+            },
+            {
+              "field": "dmarc",
+              "expected": "fail",
+              "actual": "fail",
+              "passed": true
+            },
+            {
+              "field": "domain_match",
+              "expected": false,
+              "actual": false,
+              "passed": true
+            },
+            {
+              "field": "display_spoof",
+              "expected": false,
+              "actual": false,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "capability": "email_header_analysis",
+        "input": {
+          "eml": "D:\\8.Hackthon\\forge-kill-tests\\fixtures\\email\\spf_pass_dmarc_misalignment.eml",
+          "claimed_organization": "Example Foundation",
+          "official_domain": "example.org"
+        },
+        "raw_evidence": {
+          "network_requests": [],
+          "input_path": "D:\\8.Hackthon\\forge-kill-tests\\fixtures\\email\\spf_pass_dmarc_misalignment.eml",
+          "raw_headers": "X-Fixture-Notice: SYNTHETIC UNIT TEST ONLY; no actual SPF/DKIM/DMARC verification\nAuthentication-Results: mx.receiver.example; spf=pass smtp.mailfrom=bounce@sender.example.net; dkim=none; dmarc=fail header.from=example.org\nFrom: Example Foundation <notices@example.org>\nReturn-Path: <bounce@sender.example.net>\nTo: recipient@receiver.example\nSubject: Synthetic SPF pass with receiver-reported DMARC failure\n\n",
+          "raw_headers_encoding": "latin-1 byte-preserving representation; base64 is exact",
+          "raw_headers_base64": "WC1GaXh0dXJlLU5vdGljZTogU1lOVEhFVElDIFVOSVQgVEVTVCBPTkxZOyBubyBhY3R1YWwgU1BGL0RLSU0vRE1BUkMgdmVyaWZpY2F0aW9uCkF1dGhlbnRpY2F0aW9uLVJlc3VsdHM6IG14LnJlY2VpdmVyLmV4YW1wbGU7IHNwZj1wYXNzIHNtdHAubWFpbGZyb209Ym91bmNlQHNlbmRlci5leGFtcGxlLm5ldDsgZGtpbT1ub25lOyBkbWFyYz1mYWlsIGhlYWRlci5mcm9tPWV4YW1wbGUub3JnCkZyb206IEV4YW1wbGUgRm91bmRhdGlvbiA8bm90aWNlc0BleGFtcGxlLm9yZz4KUmV0dXJuLVBhdGg6IDxib3VuY2VAc2VuZGVyLmV4YW1wbGUubmV0PgpUbzogcmVjaXBpZW50QHJlY2VpdmVyLmV4YW1wbGUKU3ViamVjdDogU3ludGhldGljIFNQRiBwYXNzIHdpdGggcmVjZWl2ZXItcmVwb3J0ZWQgRE1BUkMgZmFpbHVyZQoK",
+          "header_sha256": "1747cdd67c03d52c524d60956e8ab0eaffa5b5d2fc10d0986ec4df9903f9aba8",
+          "header_bytes": 408,
+          "header_body_separator_present": true,
+          "body_read": false,
+          "raw_headers_complete": true,
+          "authentication_results": [
+            {
+              "raw_value": "mx.receiver.example; spf=pass smtp.mailfrom=bounce@sender.example.net; dkim=none; dmarc=fail header.from=example.org",
+              "parsed": {
+                "authserv_id": "mx.receiver.example",
+                "version": "1",
+                "results": [
+                  {
+                    "method": "spf",
+                    "version": "1",
+                    "result": "pass",
+                    "properties": {
+                      "smtp.mailfrom": "bounce@sender.example.net"
+                    }
+                  },
+                  {
+                    "method": "dkim",
+                    "version": "1",
+                    "result": "none",
+                    "properties": {}
+                  },
+                  {
+                    "method": "dmarc",
+                    "version": "1",
+                    "result": "fail",
+                    "properties": {
+                      "header.from": "example.org"
+                    }
+                  }
+                ]
+              },
+              "parse_error": null
+            }
+          ],
+          "related_headers": {
+            "From": [
+              "Example Foundation <notices@example.org>"
+            ],
+            "Reply-To": [],
+            "Return-Path": [
+              "<bounce@sender.example.net>"
+            ],
+            "Received": [],
+            "Received-SPF": [],
+            "DKIM-Signature": [],
+            "ARC-Authentication-Results": []
+          },
+          "trust_configuration": {
+            "trusted_authserv_id": "mx.receiver.example",
+            "trusted_receiver_export_asserted": true,
+            "provenance_verified_by_script": false
+          },
+          "from_mailbox": "notices@example.org",
+          "from_domain": "example.org",
+          "from_display_name": "Example Foundation",
+          "organization_claim_comparison": {
+            "claimed_organization": "Example Foundation",
+            "configured_official_domain": "example.org",
+            "from_domain_matches_official_domain": true,
+            "display_name_contains_claimed_organization": true,
+            "display_name_spoof_indicator": false,
+            "finding": "domain_consistent_with_configuration",
+            "authority": "caller_configuration_only"
+          },
+          "receiver_reported_results": {
+            "spf": [
+              {
+                "method": "spf",
+                "version": "1",
+                "result": "pass",
+                "properties": {
+                  "smtp.mailfrom": "bounce@sender.example.net"
+                }
+              }
+            ],
+            "dkim": [
+              {
+                "method": "dkim",
+                "version": "1",
+                "result": "none",
+                "properties": {}
+              }
+            ],
+            "dmarc": [
+              {
+                "method": "dmarc",
+                "version": "1",
+                "result": "fail",
+                "properties": {
+                  "header.from": "example.org"
+                }
+              }
+            ]
+          }
+        },
+        "source": {
+          "kind": "SYNTHETIC_UNIT_TEST_FIXTURE",
+          "path": "D:\\8.Hackthon\\forge-kill-tests\\fixtures\\email\\spf_pass_dmarc_misalignment.eml",
+          "independently_authenticated": false
+        },
+        "latency_ms": 44.714,
+        "result": {
+          "evidence_state": "CONSISTENT_BUT_NOT_IDENTITY_PROVING",
+          "authentication_outcome": "receiver_reported_dmarc_fail",
+          "spf_outcome": "pass",
+          "dkim_outcomes": [
+            "none"
+          ],
+          "dmarc_outcome": "fail",
+          "independent_authentication_performed": false,
+          "organization_claim": {
+            "claimed_organization": "Example Foundation",
+            "configured_official_domain": "example.org",
+            "from_domain_matches_official_domain": true,
+            "display_name_contains_claimed_organization": true,
+            "display_name_spoof_indicator": false,
+            "finding": "domain_consistent_with_configuration",
+            "authority": "caller_configuration_only"
+          },
+          "scam_verdict": "not_determined"
+        },
+        "confidence_boundary": {
+          "live_crypto_verified": false,
+          "synthetic_input": true,
+          "limitations": [
+            "PASS means this input supplied complete, interpretable receiver-reported evidence; it does not mean the email is safe or authentic.",
+            "No SPF DNS evaluation, DKIM cryptographic verification, DMARC policy lookup, or network requests are performed.",
+            "Trust is a caller assertion: use an original export from a known receiver that strips spoofed Authentication-Results for its own authserv-id. An authserv-id match alone is forgeable.",
+            "Only outer message headers are read. Forwarded/attached headers, screenshots, and copied sender-provided headers are not trusted exports.",
+            "Conservative syntax subset: ASCII Authentication-Results, version 1, compact property names (header.from), exactly one matching trusted header, one SPF and DMARC result; multiple DKIM results are preserved. Other layouts fail closed.",
+            "Receiver-reported DMARC is used; relaxed alignment and organizational domains are not independently calculated.",
+            "A single message cannot establish population-level accuracy or reliability. Test a labeled set of real receiver exports separately.",
+            "Organization names and official domains are caller configuration, not independently verified authoritative identities; display names never establish identity.",
+            "Domains must be ASCII or explicit IDNA2008 A-labels (xn--). Unicode domains fail closed rather than using Python's older IDNA mapping."
+          ]
+        },
+        "status": "PASS",
+        "failure_reason": null,
+        "checks": [
+          {
+            "name": "header_structure",
+            "status": "PASS"
+          },
+          {
+            "name": "receiver_trust",
+            "status": "PASS",
+            "basis": "Explicit caller assertion and exact authserv-id match; provenance not independently verified"
+          },
+          {
+            "name": "spf_result_available",
+            "status": "PASS",
+            "reported_results": [
+              "pass"
+            ]
+          },
+          {
+            "name": "dkim_result_available",
+            "status": "PASS",
+            "reported_results": [
+              "none"
+            ]
+          },
+          {
+            "name": "dmarc_result_available",
+            "status": "PASS",
+            "reported_results": [
+              "fail"
+            ]
+          },
+          {
+            "name": "dmarc_from_identity",
+            "status": "PASS",
+            "domain": "example.org"
+          }
+        ],
+        "test_expectation": {
+          "case_passed": true,
+          "assertions": [
+            {
+              "field": "status",
+              "expected": "PASS",
+              "actual": "PASS",
+              "passed": true
+            },
+            {
+              "field": "spf",
+              "expected": "pass",
+              "actual": "pass",
+              "passed": true
+            },
+            {
+              "field": "dmarc",
+              "expected": "fail",
+              "actual": "fail",
+              "passed": true
+            },
+            {
+              "field": "domain_match",
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "field": "display_spoof",
+              "expected": false,
+              "actual": false,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "capability": "email_header_analysis",
+        "input": {
+          "eml": "D:\\8.Hackthon\\forge-kill-tests\\fixtures\\email\\valid_multiline.eml",
+          "claimed_organization": "Example Foundation",
+          "official_domain": "example.org"
+        },
+        "raw_evidence": {
+          "network_requests": [],
+          "input_path": "D:\\8.Hackthon\\forge-kill-tests\\fixtures\\email\\valid_multiline.eml",
+          "raw_headers": "X-Fixture-Notice: SYNTHETIC UNIT TEST ONLY; no actual SPF/DKIM/DMARC verification\nAuthentication-Results: mx.receiver.example 1;\n\tspf=pass (synthetic (nested; comment)) smtp.mailfrom=notices@example.org;\n\tdkim=pass reason=\"synthetic; no crypto performed\" header.i=@example.org\n\theader.s=synthetic;\n\tdmarc=pass (synthetic policy comment) header.from=example.org\nFrom: Example Foundation\n <notices@example.org>\nTo: recipient@receiver.example\nSubject: Synthetic valid folding and quoted semicolon scenario\n\n",
+          "raw_headers_encoding": "latin-1 byte-preserving representation; base64 is exact",
+          "raw_headers_base64": "WC1GaXh0dXJlLU5vdGljZTogU1lOVEhFVElDIFVOSVQgVEVTVCBPTkxZOyBubyBhY3R1YWwgU1BGL0RLSU0vRE1BUkMgdmVyaWZpY2F0aW9uCkF1dGhlbnRpY2F0aW9uLVJlc3VsdHM6IG14LnJlY2VpdmVyLmV4YW1wbGUgMTsKCXNwZj1wYXNzIChzeW50aGV0aWMgKG5lc3RlZDsgY29tbWVudCkpIHNtdHAubWFpbGZyb209bm90aWNlc0BleGFtcGxlLm9yZzsKCWRraW09cGFzcyByZWFzb249InN5bnRoZXRpYzsgbm8gY3J5cHRvIHBlcmZvcm1lZCIgaGVhZGVyLmk9QGV4YW1wbGUub3JnCgloZWFkZXIucz1zeW50aGV0aWM7CglkbWFyYz1wYXNzIChzeW50aGV0aWMgcG9saWN5IGNvbW1lbnQpIGhlYWRlci5mcm9tPWV4YW1wbGUub3JnCkZyb206IEV4YW1wbGUgRm91bmRhdGlvbgogPG5vdGljZXNAZXhhbXBsZS5vcmc+ClRvOiByZWNpcGllbnRAcmVjZWl2ZXIuZXhhbXBsZQpTdWJqZWN0OiBTeW50aGV0aWMgdmFsaWQgZm9sZGluZyBhbmQgcXVvdGVkIHNlbWljb2xvbiBzY2VuYXJpbwoK",
+          "header_sha256": "37d5429527ece19c78b9ac4308190c68a6c125422e338a43007a7ef262795a26",
+          "header_bytes": 504,
+          "header_body_separator_present": true,
+          "body_read": false,
+          "raw_headers_complete": true,
+          "authentication_results": [
+            {
+              "raw_value": "mx.receiver.example 1;\n\tspf=pass (synthetic (nested; comment)) smtp.mailfrom=notices@example.org;\n\tdkim=pass reason=\"synthetic; no crypto performed\" header.i=@example.org\n\theader.s=synthetic;\n\tdmarc=pass (synthetic policy comment) header.from=example.org",
+              "parsed": {
+                "authserv_id": "mx.receiver.example",
+                "version": "1",
+                "results": [
+                  {
+                    "method": "spf",
+                    "version": "1",
+                    "result": "pass",
+                    "properties": {
+                      "smtp.mailfrom": "notices@example.org"
+                    }
+                  },
+                  {
+                    "method": "dkim",
+                    "version": "1",
+                    "result": "pass",
+                    "properties": {
+                      "reason": "synthetic; no crypto performed",
+                      "header.i": "@example.org",
+                      "header.s": "synthetic"
+                    }
+                  },
+                  {
+                    "method": "dmarc",
+                    "version": "1",
+                    "result": "pass",
+                    "properties": {
+                      "header.from": "example.org"
+                    }
+                  }
+                ]
+              },
+              "parse_error": null
+            }
+          ],
+          "related_headers": {
+            "From": [
+              "Example Foundation\n <notices@example.org>"
+            ],
+            "Reply-To": [],
+            "Return-Path": [],
+            "Received": [],
+            "Received-SPF": [],
+            "DKIM-Signature": [],
+            "ARC-Authentication-Results": []
+          },
+          "trust_configuration": {
+            "trusted_authserv_id": "mx.receiver.example",
+            "trusted_receiver_export_asserted": true,
+            "provenance_verified_by_script": false
+          },
+          "from_mailbox": "notices@example.org",
+          "from_domain": "example.org",
+          "from_display_name": "Example Foundation",
+          "organization_claim_comparison": {
+            "claimed_organization": "Example Foundation",
+            "configured_official_domain": "example.org",
+            "from_domain_matches_official_domain": true,
+            "display_name_contains_claimed_organization": true,
+            "display_name_spoof_indicator": false,
+            "finding": "domain_consistent_with_configuration",
+            "authority": "caller_configuration_only"
+          },
+          "receiver_reported_results": {
+            "spf": [
+              {
+                "method": "spf",
+                "version": "1",
+                "result": "pass",
+                "properties": {
+                  "smtp.mailfrom": "notices@example.org"
+                }
+              }
+            ],
+            "dkim": [
+              {
+                "method": "dkim",
+                "version": "1",
+                "result": "pass",
+                "properties": {
+                  "reason": "synthetic; no crypto performed",
+                  "header.i": "@example.org",
+                  "header.s": "synthetic"
+                }
+              }
+            ],
+            "dmarc": [
+              {
+                "method": "dmarc",
+                "version": "1",
+                "result": "pass",
+                "properties": {
+                  "header.from": "example.org"
+                }
+              }
+            ]
+          }
+        },
+        "source": {
+          "kind": "SYNTHETIC_UNIT_TEST_FIXTURE",
+          "path": "D:\\8.Hackthon\\forge-kill-tests\\fixtures\\email\\valid_multiline.eml",
+          "independently_authenticated": false
+        },
+        "latency_ms": 44.194,
+        "result": {
+          "evidence_state": "CONSISTENT_BUT_NOT_IDENTITY_PROVING",
+          "authentication_outcome": "receiver_reported_dmarc_pass",
+          "spf_outcome": "pass",
+          "dkim_outcomes": [
+            "pass"
+          ],
+          "dmarc_outcome": "pass",
+          "independent_authentication_performed": false,
+          "organization_claim": {
+            "claimed_organization": "Example Foundation",
+            "configured_official_domain": "example.org",
+            "from_domain_matches_official_domain": true,
+            "display_name_contains_claimed_organization": true,
+            "display_name_spoof_indicator": false,
+            "finding": "domain_consistent_with_configuration",
+            "authority": "caller_configuration_only"
+          },
+          "scam_verdict": "not_determined"
+        },
+        "confidence_boundary": {
+          "live_crypto_verified": false,
+          "synthetic_input": true,
+          "limitations": [
+            "PASS means this input supplied complete, interpretable receiver-reported evidence; it does not mean the email is safe or authentic.",
+            "No SPF DNS evaluation, DKIM cryptographic verification, DMARC policy lookup, or network requests are performed.",
+            "Trust is a caller assertion: use an original export from a known receiver that strips spoofed Authentication-Results for its own authserv-id. An authserv-id match alone is forgeable.",
+            "Only outer message headers are read. Forwarded/attached headers, screenshots, and copied sender-provided headers are not trusted exports.",
+            "Conservative syntax subset: ASCII Authentication-Results, version 1, compact property names (header.from), exactly one matching trusted header, one SPF and DMARC result; multiple DKIM results are preserved. Other layouts fail closed.",
+            "Receiver-reported DMARC is used; relaxed alignment and organizational domains are not independently calculated.",
+            "A single message cannot establish population-level accuracy or reliability. Test a labeled set of real receiver exports separately.",
+            "Organization names and official domains are caller configuration, not independently verified authoritative identities; display names never establish identity.",
+            "Domains must be ASCII or explicit IDNA2008 A-labels (xn--). Unicode domains fail closed rather than using Python's older IDNA mapping."
+          ]
+        },
+        "status": "PASS",
+        "failure_reason": null,
+        "checks": [
+          {
+            "name": "header_structure",
+            "status": "PASS"
+          },
+          {
+            "name": "receiver_trust",
+            "status": "PASS",
+            "basis": "Explicit caller assertion and exact authserv-id match; provenance not independently verified"
+          },
+          {
+            "name": "spf_result_available",
+            "status": "PASS",
+            "reported_results": [
+              "pass"
+            ]
+          },
+          {
+            "name": "dkim_result_available",
+            "status": "PASS",
+            "reported_results": [
+              "pass"
+            ]
+          },
+          {
+            "name": "dmarc_result_available",
+            "status": "PASS",
+            "reported_results": [
+              "pass"
+            ]
+          },
+          {
+            "name": "dmarc_from_identity",
+            "status": "PASS",
+            "domain": "example.org"
+          }
+        ],
+        "test_expectation": {
+          "case_passed": true,
+          "assertions": [
+            {
+              "field": "status",
+              "expected": "PASS",
+              "actual": "PASS",
+              "passed": true
+            },
+            {
+              "field": "spf",
+              "expected": "pass",
+              "actual": "pass",
+              "passed": true
+            },
+            {
+              "field": "dmarc",
+              "expected": "pass",
+              "actual": "pass",
+              "passed": true
+            },
+            {
+              "field": "domain_match",
+              "expected": true,
+              "actual": true,
+              "passed": true
+            },
+            {
+              "field": "display_spoof",
+              "expected": false,
+              "actual": false,
+              "passed": true
+            }
+          ]
+        }
+      },
+      {
+        "capability": "email_header_analysis",
+        "input": {
+          "eml": "D:\\8.Hackthon\\forge-kill-tests\\fixtures\\email\\malformed_headers.eml",
+          "claimed_organization": "Example Foundation",
+          "official_domain": "example.org"
+        },
+        "raw_evidence": {
+          "network_requests": [],
+          "input_path": "D:\\8.Hackthon\\forge-kill-tests\\fixtures\\email\\malformed_headers.eml",
+          "raw_headers": "X-Fixture-Notice: SYNTHETIC UNIT TEST ONLY; deliberately malformed header\nAuthentication-Results: mx.receiver.example;\n spf=pass (unclosed synthetic comment smtp.mailfrom=notices@example.org;\n dkim=pass header.d=example.org; dmarc=pass header.from=example.org\nFrom: Example Foundation <notices@example.org>\nTo: recipient@receiver.example\nSubject: Synthetic malformed Authentication-Results scenario\n\n",
+          "raw_headers_encoding": "latin-1 byte-preserving representation; base64 is exact",
+          "raw_headers_base64": "WC1GaXh0dXJlLU5vdGljZTogU1lOVEhFVElDIFVOSVQgVEVTVCBPTkxZOyBkZWxpYmVyYXRlbHkgbWFsZm9ybWVkIGhlYWRlcgpBdXRoZW50aWNhdGlvbi1SZXN1bHRzOiBteC5yZWNlaXZlci5leGFtcGxlOwogc3BmPXBhc3MgKHVuY2xvc2VkIHN5bnRoZXRpYyBjb21tZW50IHNtdHAubWFpbGZyb209bm90aWNlc0BleGFtcGxlLm9yZzsKIGRraW09cGFzcyBoZWFkZXIuZD1leGFtcGxlLm9yZzsgZG1hcmM9cGFzcyBoZWFkZXIuZnJvbT1leGFtcGxlLm9yZwpGcm9tOiBFeGFtcGxlIEZvdW5kYXRpb24gPG5vdGljZXNAZXhhbXBsZS5vcmc+ClRvOiByZWNpcGllbnRAcmVjZWl2ZXIuZXhhbXBsZQpTdWJqZWN0OiBTeW50aGV0aWMgbWFsZm9ybWVkIEF1dGhlbnRpY2F0aW9uLVJlc3VsdHMgc2NlbmFyaW8KCg==",
+          "header_sha256": "eb4866feb3b113c7712825eab544b6f253119a77647bec8bdd8678ba1bc3e21d",
+          "header_bytes": 400,
+          "header_body_separator_present": true,
+          "body_read": false,
+          "raw_headers_complete": true,
+          "authentication_results": [
+            {
+              "raw_value": "mx.receiver.example;\n spf=pass (unclosed synthetic comment smtp.mailfrom=notices@example.org;\n dkim=pass header.d=example.org; dmarc=pass header.from=example.org",
+              "parsed": null,
+              "parse_error": "Unclosed Authentication-Results comment"
+            }
+          ],
+          "related_headers": {
+            "From": [
+              "Example Foundation <notices@example.org>"
+            ],
+            "Reply-To": [],
+            "Return-Path": [],
+            "Received": [],
+            "Received-SPF": [],
+            "DKIM-Signature": [],
+            "ARC-Authentication-Results": []
+          },
+          "trust_configuration": {
+            "trusted_authserv_id": "mx.receiver.example",
+            "trusted_receiver_export_asserted": true,
+            "provenance_verified_by_script": false
+          }
+        },
+        "source": {
+          "kind": "SYNTHETIC_UNIT_TEST_FIXTURE",
+          "path": "D:\\8.Hackthon\\forge-kill-tests\\fixtures\\email\\malformed_headers.eml",
+          "independently_authenticated": false
+        },
+        "latency_ms": 47.942,
+        "result": {
+          "evidence_state": "NO_AUTHORITATIVE_DATA",
+          "authentication_outcome": "unresolved"
+        },
+        "confidence_boundary": {
+          "live_crypto_verified": false,
+          "synthetic_input": true,
+          "limitations": [
+            "PASS means this input supplied complete, interpretable receiver-reported evidence; it does not mean the email is safe or authentic.",
+            "No SPF DNS evaluation, DKIM cryptographic verification, DMARC policy lookup, or network requests are performed.",
+            "Trust is a caller assertion: use an original export from a known receiver that strips spoofed Authentication-Results for its own authserv-id. An authserv-id match alone is forgeable.",
+            "Only outer message headers are read. Forwarded/attached headers, screenshots, and copied sender-provided headers are not trusted exports.",
+            "Conservative syntax subset: ASCII Authentication-Results, version 1, compact property names (header.from), exactly one matching trusted header, one SPF and DMARC result; multiple DKIM results are preserved. Other layouts fail closed.",
+            "Receiver-reported DMARC is used; relaxed alignment and organizational domains are not independently calculated.",
+            "A single message cannot establish population-level accuracy or reliability. Test a labeled set of real receiver exports separately.",
+            "Organization names and official domains are caller configuration, not independently verified authoritative identities; display names never establish identity.",
+            "Domains must be ASCII or explicit IDNA2008 A-labels (xn--). Unicode domains fail closed rather than using Python's older IDNA mapping."
+          ]
+        },
+        "status": "FAIL",
+        "failure_reason": "ProbeError: Malformed/unsupported Authentication-Results: Unclosed Authentication-Results comment",
+        "checks": [
+          {
+            "name": "header_structure",
+            "status": "PASS"
+          },
+          {
+            "name": "feasibility_gate",
+            "status": "FAIL",
+            "reason": "Malformed/unsupported Authentication-Results: Unclosed Authentication-Results comment"
+          }
+        ],
+        "test_expectation": {
+          "case_passed": true,
+          "assertions": [
+            {
+              "field": "status",
+              "expected": "FAIL",
+              "actual": "FAIL",
+              "passed": true
+            },
+            {
+              "field": "failure_contains",
+              "expected": "Unclosed Authentication-Results comment",
+              "actual": "ProbeError: Malformed/unsupported Authentication-Results: Unclosed Authentication-Results comment",
+              "passed": true
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "source": {
+    "kind": "SYNTHETIC_UNIT_TEST_FIXTURES",
+    "authoritative": false
+  },
+  "latency_ms": 272.277,
+  "result": {
+    "evidence_state": "CONSISTENT_BUT_NOT_IDENTITY_PROVING",
+    "case_passed": true,
+    "passed_cases": 6,
+    "total_cases": 6,
+    "assessment_failures": 1,
+    "real_email_feasibility": "UNTESTED"
+  },
+  "confidence_boundary": {
+    "live_crypto_verified": false,
+    "synthetic_input": true,
+    "limitations": [
+      "PASS means this input supplied complete, interpretable receiver-reported evidence; it does not mean the email is safe or authentic.",
+      "No SPF DNS evaluation, DKIM cryptographic verification, DMARC policy lookup, or network requests are performed.",
+      "Trust is a caller assertion: use an original export from a known receiver that strips spoofed Authentication-Results for its own authserv-id. An authserv-id match alone is forgeable.",
+      "Only outer message headers are read. Forwarded/attached headers, screenshots, and copied sender-provided headers are not trusted exports.",
+      "Conservative syntax subset: ASCII Authentication-Results, version 1, compact property names (header.from), exactly one matching trusted header, one SPF and DMARC result; multiple DKIM results are preserved. Other layouts fail closed.",
+      "Receiver-reported DMARC is used; relaxed alignment and organizational domains are not independently calculated.",
+      "A single message cannot establish population-level accuracy or reliability. Test a labeled set of real receiver exports separately.",
+      "Organization names and official domains are caller configuration, not independently verified authoritative identities; display names never establish identity.",
+      "Domains must be ASCII or explicit IDNA2008 A-labels (xn--). Unicode domains fail closed rather than using Python's older IDNA mapping."
+    ]
+  },
+  "status": "PASS",
+  "failure_reason": null
+}

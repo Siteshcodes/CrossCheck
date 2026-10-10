@@ -1,0 +1,231 @@
+{
+  "tests": [
+    {
+      "run": 1,
+      "exit_code": 0,
+      "latency_ms": 3091.226,
+      "output": "----------------------------------------------------------------------\nRan 37 tests in 2.782s\n\nOK\n"
+    },
+    {
+      "run": 2,
+      "exit_code": 0,
+      "latency_ms": 3162.246,
+      "output": "----------------------------------------------------------------------\nRan 37 tests in 2.853s\n\nOK\n"
+    },
+    {
+      "run": 3,
+      "exit_code": 0,
+      "latency_ms": 3098.685,
+      "output": "----------------------------------------------------------------------\nRan 37 tests in 2.752s\n\nOK\n"
+    }
+  ],
+  "flagship": [
+    {
+      "run": 1,
+      "latency_ms": 1874.611,
+      "summary": {
+        "independent_evidence_count": 1,
+        "contradicted_claim_count": 1,
+        "verified_claim_count": 0,
+        "unresolved_claim_count": 3,
+        "verification_mechanism_count": 1,
+        "evidence_groups": {
+          "eg_4b0289863ab44ca9bd30226f": {
+            "evidence_ids": [
+              "e1",
+              "e4"
+            ],
+            "mechanism": "official_policy_process"
+          }
+        },
+        "demo_gate": {
+          "result": "FAIL",
+          "checks": {
+            "4_to_5_critical_claims": true,
+            "at_least_3_useful_independent_findings": false,
+            "at_least_2_verification_mechanisms": false,
+            "at_most_2_unresolved_critical_claims": false,
+            "live_llm_extraction_works": false,
+            "zero_fabricated_evidence": true
+          }
+        },
+        "boundary": "Groups share underlying provenance. Missing, failed, synthetic and unbound email evidence are excluded; no probability is computed."
+      },
+      "failures": [
+        {
+          "method": "receiver_reported_spf_dkim_dmarc",
+          "error": {
+            "type": "EvidenceUnavailable",
+            "message": "Original .eml required"
+          },
+          "latency_ms": 0
+        },
+        {
+          "method": "rdap_domain_provenance",
+          "error": {
+            "type": "RDAPFailure",
+            "message": "ProbeError: HTTP 404 from https://rdap.verisign.com/com/v1/domain/nvidia-careers-team.com"
+          },
+          "latency_ms": 1574.211
+        }
+      ]
+    },
+    {
+      "run": 2,
+      "latency_ms": 1778.433,
+      "summary": {
+        "independent_evidence_count": 1,
+        "contradicted_claim_count": 1,
+        "verified_claim_count": 0,
+        "unresolved_claim_count": 3,
+        "verification_mechanism_count": 1,
+        "evidence_groups": {
+          "eg_4b0289863ab44ca9bd30226f": {
+            "evidence_ids": [
+              "e1",
+              "e4"
+            ],
+            "mechanism": "official_policy_process"
+          }
+        },
+        "demo_gate": {
+          "result": "FAIL",
+          "checks": {
+            "4_to_5_critical_claims": true,
+            "at_least_3_useful_independent_findings": false,
+            "at_least_2_verification_mechanisms": false,
+            "at_most_2_unresolved_critical_claims": false,
+            "live_llm_extraction_works": false,
+            "zero_fabricated_evidence": true
+          }
+        },
+        "boundary": "Groups share underlying provenance. Missing, failed, synthetic and unbound email evidence are excluded; no probability is computed."
+      },
+      "failures": [
+        {
+          "method": "receiver_reported_spf_dkim_dmarc",
+          "error": {
+            "type": "EvidenceUnavailable",
+            "message": "Original .eml required"
+          },
+          "latency_ms": 0
+        },
+        {
+          "method": "rdap_domain_provenance",
+          "error": {
+            "type": "RDAPFailure",
+            "message": "ProbeError: HTTP 404 from https://rdap.verisign.com/com/v1/domain/nvidia-careers-team.com"
+          },
+          "latency_ms": 1433.674
+        }
+      ]
+    },
+    {
+      "run": 3,
+      "latency_ms": 1747.705,
+      "summary": {
+        "independent_evidence_count": 1,
+        "contradicted_claim_count": 1,
+        "verified_claim_count": 0,
+        "unresolved_claim_count": 3,
+        "verification_mechanism_count": 1,
+        "evidence_groups": {
+          "eg_4b0289863ab44ca9bd30226f": {
+            "evidence_ids": [
+              "e1",
+              "e4"
+            ],
+            "mechanism": "official_policy_process"
+          }
+        },
+        "demo_gate": {
+          "result": "FAIL",
+          "checks": {
+            "4_to_5_critical_claims": true,
+            "at_least_3_useful_independent_findings": false,
+            "at_least_2_verification_mechanisms": false,
+            "at_most_2_unresolved_critical_claims": false,
+            "live_llm_extraction_works": false,
+            "zero_fabricated_evidence": true
+          }
+        },
+        "boundary": "Groups share underlying provenance. Missing, failed, synthetic and unbound email evidence are excluded; no probability is computed."
+      },
+      "failures": [
+        {
+          "method": "receiver_reported_spf_dkim_dmarc",
+          "error": {
+            "type": "EvidenceUnavailable",
+            "message": "Original .eml required"
+          },
+          "latency_ms": 0
+        },
+        {
+          "method": "rdap_domain_provenance",
+          "error": {
+            "type": "RDAPFailure",
+            "message": "ProbeError: HTTP 404 from https://rdap.verisign.com/com/v1/domain/nvidia-careers-team.com"
+          },
+          "latency_ms": 1409.295
+        }
+      ]
+    }
+  ],
+  "live_llm_flagship": [
+    {
+      "run": 1,
+      "status": "FAIL",
+      "error": "Live LLM mode requires OPENAI_API_KEY; no response was fabricated",
+      "provider": {
+        "endpoint": "https://api.openai.com/v1/responses",
+        "model": "gpt-6.1-sol",
+        "http_status": null,
+        "network_request_made": false,
+        "latency_ms": 0.004
+      }
+    },
+    {
+      "run": 2,
+      "status": "FAIL",
+      "error": "Live LLM mode requires OPENAI_API_KEY; no response was fabricated",
+      "provider": {
+        "endpoint": "https://api.openai.com/v1/responses",
+        "model": "gpt-6.1-sol",
+        "http_status": null,
+        "network_request_made": false,
+        "latency_ms": 0.005
+      }
+    },
+    {
+      "run": 3,
+      "status": "FAIL",
+      "error": "Live LLM mode requires OPENAI_API_KEY; no response was fabricated",
+      "provider": {
+        "endpoint": "https://api.openai.com/v1/responses",
+        "model": "gpt-6.1-sol",
+        "http_status": null,
+        "network_request_made": false,
+        "latency_ms": 0.002
+      }
+    }
+  ],
+  "separate_real_email_pipeline": {
+    "state": "CONSISTENT_BUT_NOT_IDENTITY_PROVING",
+    "latency_ms": 36.32,
+    "error": null,
+    "excluded_from_nvidia": true,
+    "observations": {
+      "evidence_state": "CONSISTENT_BUT_NOT_IDENTITY_PROVING",
+      "authentication_outcome": "receiver_reported_dmarc_pass",
+      "spf_outcome": "pass",
+      "dkim_outcomes": [
+        "pass",
+        "pass"
+      ],
+      "dmarc_outcome": "pass",
+      "independent_authentication_performed": false,
+      "organization_claim": null,
+      "scam_verdict": "not_determined"
+    }
+  }
+}

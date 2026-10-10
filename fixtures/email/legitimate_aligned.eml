@@ -1,0 +1,7 @@
+X-Fixture-Notice: SYNTHETIC UNIT TEST ONLY; no actual SPF/DKIM/DMARC verification
+Authentication-Results: mx.receiver.example; spf=pass smtp.mailfrom=notices@example.org; dkim=pass header.d=example.org header.s=synthetic; dmarc=pass header.from=example.org
+From: Example Foundation <notices@example.org>
+To: recipient@receiver.example
+Subject: Synthetic aligned domain scenario
+
+This is an invented parser fixture, not a real received email or valid signed message.

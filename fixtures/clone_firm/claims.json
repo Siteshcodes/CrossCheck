@@ -1,0 +1,58 @@
+{
+  "origin": "fixture_annotation",
+  "message_sha256": "990fc11848add1fc0560975241035f02e5638a6bb92d79f9808c53e4815f42c8",
+  "claims": [
+    {
+      "id": "c1",
+      "kind": "clone_affiliation",
+      "statement": "We are IPO Horizon, representing Horizon Financial Planning Limited.",
+      "organization": "Horizon Financial Planning Limited",
+      "source_quote": "We are IPO Horizon, representing Horizon Financial Planning Limited.",
+      "start": 0,
+      "end": 68,
+      "domain": null,
+      "basis": "explicit",
+      "verification_route": "regulator_clone_warning",
+      "polarity": "positive"
+    },
+    {
+      "id": "c2",
+      "kind": "regulated_firm",
+      "statement": "Horizon Financial Planning Limited is FCA authorised with Firm Reference Number 307222.",
+      "organization": "Horizon Financial Planning Limited",
+      "source_quote": "Horizon Financial Planning Limited is FCA authorised with Firm Reference Number 307222.",
+      "start": 69,
+      "end": 156,
+      "domain": null,
+      "basis": "explicit",
+      "verification_route": "regulator_record_lookup",
+      "polarity": "positive"
+    },
+    {
+      "id": "c3",
+      "kind": "legal_entity",
+      "statement": "Horizon Financial Planning Limited is an active UK company.",
+      "organization": "Horizon Financial Planning Limited",
+      "source_quote": "Horizon Financial Planning Limited is an active UK company.",
+      "start": 157,
+      "end": 216,
+      "domain": null,
+      "basis": "explicit",
+      "verification_route": "legal_entity_registry",
+      "polarity": "positive"
+    },
+    {
+      "id": "c4",
+      "kind": "regulated_contact",
+      "statement": "Our official website is ipohorizon.com and our contact number is +447721904036.",
+      "organization": "Horizon Financial Planning Limited",
+      "source_quote": "Our official website is ipohorizon.com and our contact number is +447721904036.",
+      "start": 217,
+      "end": 296,
+      "domain": "ipohorizon.com",
+      "basis": "implied",
+      "verification_route": "regulator_contact_comparison",
+      "polarity": "positive"
+    }
+  ]
+}

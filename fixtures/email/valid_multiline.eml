@@ -1,0 +1,12 @@
+X-Fixture-Notice: SYNTHETIC UNIT TEST ONLY; no actual SPF/DKIM/DMARC verification
+Authentication-Results: mx.receiver.example 1;
+	spf=pass (synthetic (nested; comment)) smtp.mailfrom=notices@example.org;
+	dkim=pass reason="synthetic; no crypto performed" header.i=@example.org
+	header.s=synthetic;
+	dmarc=pass (synthetic policy comment) header.from=example.org
+From: Example Foundation
+ <notices@example.org>
+To: recipient@receiver.example
+Subject: Synthetic valid folding and quoted semicolon scenario
+
+Invented multiline fixture. Header folding does not itself imply a malformed email.

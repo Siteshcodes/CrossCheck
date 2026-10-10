@@ -1,0 +1,58 @@
+{
+  "origin": "fixture_annotation",
+  "message_sha256": "fdc69e5c05fea4174d6da92a81f69a708b29bd24d1771b04441815e3d37944f6",
+  "claims": [
+    {
+      "id": "c1",
+      "kind": "representation",
+      "statement": "The sender represents NVIDIA.",
+      "organization": "NVIDIA",
+      "source_quote": "I\u2019m an NVIDIA recruiter",
+      "start": 4,
+      "end": 27,
+      "domain": null,
+      "basis": "explicit",
+      "verification_route": "identity_boundary",
+      "polarity": "positive"
+    },
+    {
+      "id": "c2",
+      "kind": "domain_association",
+      "statement": "The contact domain is an official NVIDIA recruiting email domain.",
+      "organization": "NVIDIA",
+      "source_quote": "recruiter@nvidia-careers-team.com",
+      "start": 220,
+      "end": 253,
+      "domain": "nvidia-careers-team.com",
+      "basis": "implied",
+      "verification_route": "official_domain_comparison",
+      "polarity": "positive"
+    },
+    {
+      "id": "c3",
+      "kind": "equipment_fee",
+      "statement": "The candidate must pay \u00e2\u201a\u00b938,500 for equipment during onboarding.",
+      "organization": "NVIDIA",
+      "source_quote": "pay \u20b938,500 to our authorized equipment vendor",
+      "start": 119,
+      "end": 165,
+      "domain": null,
+      "basis": "explicit",
+      "verification_route": "official_policy_process",
+      "polarity": "positive"
+    },
+    {
+      "id": "c4",
+      "kind": "reimbursement",
+      "statement": "NVIDIA will reimburse the candidate after onboarding.",
+      "organization": "NVIDIA",
+      "source_quote": "NVIDIA will reimburse you after onboarding",
+      "start": 167,
+      "end": 209,
+      "domain": null,
+      "basis": "explicit",
+      "verification_route": "official_policy_process",
+      "polarity": "positive"
+    }
+  ]
+}

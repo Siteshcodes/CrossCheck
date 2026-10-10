@@ -1,0 +1,106 @@
+{
+  "dataset_origin": "synthetic_example",
+  "checks": [
+    {
+      "id": "india-synthetic-infosys-recruiter-equipment-training-fee",
+      "kind": "upfront_payment",
+      "policy": {
+        "scope": {
+          "organization": "Infosys Limited",
+          "process": "recruitment",
+          "stage": "job offer",
+          "jurisdiction": "India"
+        },
+        "source_url": "https://www.infosys.com/careers/apply/recruitment-fraud-alert.html",
+        "quote": "Infosys never requests for fees for any purpose during or after the hiring process.",
+        "fact": {
+          "allowed": false
+        }
+      },
+      "observation": {
+        "scope": {
+          "organization": "Infosys Limited",
+          "process": "recruitment",
+          "stage": "job offer",
+          "jurisdiction": "India"
+        },
+        "raw_text": "SYNTHETIC TEST MESSAGE, NOT RECEIVED EVIDENCE: I am an Infosys recruiter in India. To receive your job offer you must pay INR 5000 upfront for equipment and training.",
+        "excerpt": "I am an Infosys recruiter in India. To receive your job offer you must pay INR 5000 upfront for equipment and training.",
+        "fact": {
+          "requested": true
+        }
+      }
+    },
+    {
+      "id": "india-synthetic-police-immediate-safe-account-transfer",
+      "kind": "urgent_transfer",
+      "policy": {
+        "scope": {
+          "organization": "Indian law enforcement agency",
+          "process": "claimed criminal investigation",
+          "stage": "caller pressures immediate money transfer",
+          "jurisdiction": "India"
+        },
+        "source_url": "https://www.cert-in.org.in/s2cMainServlet?VLCODE=CIAD-2024-0050&pageid=PUBVLNOTES02",
+        "quote": "Legitimate Law Enforcement Agencies will never pressure you into sending money immediately.",
+        "fact": {
+          "allowed": false
+        }
+      },
+      "observation": {
+        "scope": {
+          "organization": "Indian law enforcement agency",
+          "process": "claimed criminal investigation",
+          "stage": "caller pressures immediate money transfer",
+          "jurisdiction": "India"
+        },
+        "raw_text": "SYNTHETIC TEST MESSAGE, NOT RECEIVED EVIDENCE: I am a police officer investigating you. Transfer your savings into our safe account immediately or we will arrest you now.",
+        "excerpt": "I am a police officer investigating you. Transfer your savings into our safe account immediately or we will arrest you now.",
+        "fact": {
+          "requested": true
+        }
+      }
+    },
+    {
+      "id": "india-synthetic-sbi-caller-otp-pin-password-request",
+      "kind": "credential_request",
+      "policy": {
+        "scope": {
+          "organization": "State Bank of India",
+          "process": "bank caller credential disclosure",
+          "stage": "phone call",
+          "jurisdiction": "India"
+        },
+        "source_url": "https://sbi.bank.in/en/web/personal-banking/cyber-security",
+        "quote": [
+          "Remember, Bank never asks for your user ID/passwords/Card No/PIN/Passwords/CVV.",
+          "Do not share OTP, ATM PIN, CVV over the phone."
+        ],
+        "fact": {
+          "forbidden": [
+            "otp",
+            "pin",
+            "password"
+          ]
+        }
+      },
+      "observation": {
+        "scope": {
+          "organization": "State Bank of India",
+          "process": "bank caller credential disclosure",
+          "stage": "phone call",
+          "jurisdiction": "India"
+        },
+        "raw_text": "SYNTHETIC TEST MESSAGE, NOT RECEIVED EVIDENCE: I am calling from SBI. Tell me your OTP, ATM PIN and internet banking password over this phone call to verify your account.",
+        "excerpt": "I am calling from SBI. Tell me your OTP, ATM PIN and internet banking password over this phone call to verify your account.",
+        "fact": {
+          "requested": [
+            "otp",
+            "pin",
+            "password"
+          ]
+        }
+      }
+    }
+  ]
+}

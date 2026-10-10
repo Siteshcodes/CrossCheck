@@ -1,0 +1,38 @@
+{
+  "capability": "RDAP domain provenance",
+  "cases": [
+    {
+      "input": {
+        "domain": "https://microsoft.com",
+        "claimed_organization": null,
+        "official_domain": null,
+        "dataset_origin": "live_public_rdap"
+      },
+      "raw_evidence": [],
+      "source": {
+        "bootstrap_url": "https://data.iana.org/rdap/dns.json"
+      },
+      "latency_ms": 0.068,
+      "result": {
+        "evidence_state": "NO_AUTHORITATIVE_DATA"
+      },
+      "confidence_boundary": [
+        "PASS requires a real domain RDAP record, usable registration date, and a named registrar. This is metadata feasibility, not a scam verdict.",
+        "RDAP records current registration metadata; registration age is not proof of ownership continuity, sender identity, or legitimacy.",
+        "Registry responses can redact registrants. Registrar identity is not registrant identity. No registrar referral or historical WHOIS lookup is performed.",
+        "The exact supplied domain is queried. A subdomain is not silently replaced with a registrable parent.",
+        "One selected HTTPS service, no cache/retries/hidden fallback. Timeout bounds each blocking socket operation, not total wall time."
+      ],
+      "status": "FAIL",
+      "failure_reason": "ProbeError: Invalid DNS label in supplied domain"
+    }
+  ],
+  "latency_ms": 19.65,
+  "summary": {
+    "passed": 0,
+    "failed": 1,
+    "total": 1
+  },
+  "status": "FAIL",
+  "failure_reason": "One or more cases lacked required evidence; inspect each case failure_reason"
+}

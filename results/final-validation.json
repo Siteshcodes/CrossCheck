@@ -1,0 +1,47 @@
+{
+  "checks": [
+    {
+      "script": "rdap_domain_provenance.py",
+      "check": "help",
+      "passed": true
+    },
+    {
+      "script": "rdap_domain_provenance.py",
+      "check": "invalid-cli",
+      "passed": true
+    },
+    {
+      "script": "email_header_analysis.py",
+      "check": "help",
+      "passed": true
+    },
+    {
+      "script": "email_header_analysis.py",
+      "check": "invalid-cli",
+      "passed": true
+    },
+    {
+      "script": "organization_contact_verification.py",
+      "check": "help",
+      "passed": true
+    },
+    {
+      "script": "organization_contact_verification.py",
+      "check": "invalid-cli",
+      "passed": true
+    },
+    {
+      "script": "scam_process_contradictions.py",
+      "check": "help",
+      "passed": true
+    },
+    {
+      "script": "scam_process_contradictions.py",
+      "check": "invalid-cli",
+      "passed": true
+    }
+  ],
+  "passed": 8,
+  "compiled_scripts": 4,
+  "allowed_evidence_states_valid": true
+}

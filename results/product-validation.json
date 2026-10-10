@@ -1,0 +1,118 @@
+{
+  "elapsed_seconds": 1.769,
+  "summary": {
+    "useful_finding_count": 4,
+    "independent_evidence_count": 3,
+    "verification_mechanism_count": 3,
+    "contradicted_claim_count": 2,
+    "verified_claim_count": 2,
+    "unresolved_claim_count": 0,
+    "evidence_groups": {
+      "eg_df84207c67a221f5ddc0dcae": {
+        "mechanism": "regulator_record_lookup",
+        "evidence_ids": [
+          "e1",
+          "e4"
+        ]
+      },
+      "eg_a7b414fc231899c9cdbd00e7": {
+        "mechanism": "legal_entity_registry",
+        "evidence_ids": [
+          "e2"
+        ]
+      },
+      "eg_5a73136dd64b84acc31e9679": {
+        "mechanism": "rdap_domain_provenance",
+        "evidence_ids": [
+          "e3"
+        ]
+      }
+    },
+    "demo_gate": {
+      "result": "PASS",
+      "checks": {
+        "4_to_5_critical_claims": true,
+        "at_least_3_useful_findings": true,
+        "at_least_2_independent_evidence_groups": true,
+        "at_least_2_verification_mechanisms": true,
+        "at_most_2_unresolved_critical_claims": true,
+        "true_fact_does_not_authenticate_contacting_party": true,
+        "zero_fabricated_evidence": true
+      }
+    },
+    "boundary": "Useful findings are distinct resolved critical predicates; they are not independent sources. FCA-derived findings share one group. LLM reliability is evaluated separately."
+  },
+  "extraction": {
+    "mode": "fixture_annotation",
+    "used_llm": false,
+    "raw_extraction": {
+      "claims": [
+        {
+          "id": "c1",
+          "kind": "clone_affiliation",
+          "statement": "We are IPO Horizon, representing Horizon Financial Planning Limited.",
+          "organization": "Horizon Financial Planning Limited",
+          "source_quote": "We are IPO Horizon, representing Horizon Financial Planning Limited.",
+          "start": 0,
+          "end": 68,
+          "domain": null,
+          "basis": "explicit",
+          "verification_route": "regulator_clone_warning",
+          "polarity": "positive"
+        },
+        {
+          "id": "c2",
+          "kind": "regulated_firm",
+          "statement": "Horizon Financial Planning Limited is FCA authorised with Firm Reference Number 307222.",
+          "organization": "Horizon Financial Planning Limited",
+          "source_quote": "Horizon Financial Planning Limited is FCA authorised with Firm Reference Number 307222.",
+          "start": 69,
+          "end": 156,
+          "domain": null,
+          "basis": "explicit",
+          "verification_route": "regulator_record_lookup",
+          "polarity": "positive"
+        },
+        {
+          "id": "c3",
+          "kind": "legal_entity",
+          "statement": "Horizon Financial Planning Limited is an active UK company.",
+          "organization": "Horizon Financial Planning Limited",
+          "source_quote": "Horizon Financial Planning Limited is an active UK company.",
+          "start": 157,
+          "end": 216,
+          "domain": null,
+          "basis": "explicit",
+          "verification_route": "legal_entity_registry",
+          "polarity": "positive"
+        },
+        {
+          "id": "c4",
+          "kind": "regulated_contact",
+          "statement": "Our official website is ipohorizon.com and our contact number is +447721904036.",
+          "organization": "Horizon Financial Planning Limited",
+          "source_quote": "Our official website is ipohorizon.com and our contact number is +447721904036.",
+          "start": 217,
+          "end": 296,
+          "domain": "ipohorizon.com",
+          "basis": "implied",
+          "verification_route": "regulator_contact_comparison",
+          "polarity": "positive"
+        }
+      ]
+    },
+    "boundary": "Manually annotated fixture/analyst claims; extraction accuracy is not a live LLM measurement.",
+    "omitted_candidates": []
+  },
+  "backend_tests": 70,
+  "frontend_tests": 11,
+  "lint": "PASS",
+  "build": "PASS",
+  "browser": {
+    "flagship": "PASS",
+    "contact_inspector": "PASS",
+    "mobile_no_horizontal_overflow": "PASS",
+    "missing_key_failure_no_substitution": "PASS"
+  },
+  "limitation": "Current process has no API key; success uses explicit fixture annotations and live source verification."
+}

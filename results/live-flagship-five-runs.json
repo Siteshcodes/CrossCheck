@@ -1,0 +1,512 @@
+[
+  {
+    "run": 1,
+    "http_status": 200,
+    "checks": {
+      "http_200": true,
+      "live_model_ran": true,
+      "affiliation_routed": true,
+      "contact_bound": true,
+      "no_fabricated_evidence": true
+    },
+    "result": "PASS",
+    "claims": [
+      {
+        "extracted_claim": "We are IPO Horizon, representing Horizon Financial Planning Limited.",
+        "supporting_quote": "We are IPO Horizon, representing Horizon Financial Planning Limited.",
+        "normalized_organization": "ipo horizon",
+        "route": "regulator_clone_warning",
+        "evidence_state": "CONTRADICTED_BY_AUTHORITATIVE_SOURCE",
+        "evidence_sources": [
+          {
+            "title": "Financial Conduct Authority",
+            "url": "https://www.fca.org.uk/news/warnings/ipo-horizon-clone-fca-authorised-firm",
+            "evidence_group": "eg_df84207c67a221f5ddc0dcae"
+          }
+        ],
+        "assignment_reason": "FCA identifies IPO Horizon as a clone and expressly says the genuine authorised firm has no connection with it."
+      },
+      {
+        "extracted_claim": "Horizon Financial Planning Limited is FCA authorised with Firm Reference Number 307222.",
+        "supporting_quote": "Horizon Financial Planning Limited is FCA authorised with Firm Reference Number 307222.",
+        "normalized_organization": "horizon financial planning limited",
+        "route": "regulator_record_lookup",
+        "evidence_state": "VERIFIED_BY_AUTHORITATIVE_SOURCE",
+        "evidence_sources": [
+          {
+            "title": "Financial Conduct Authority",
+            "url": "https://www.fca.org.uk/news/warnings/ipo-horizon-clone-fca-authorised-firm",
+            "evidence_group": "eg_df84207c67a221f5ddc0dcae"
+          }
+        ],
+        "assignment_reason": "FCA's warning identifies Horizon Financial Planning Limited as the genuine authorised firm with FRN 307222."
+      },
+      {
+        "extracted_claim": "Horizon Financial Planning Limited is an active UK company.",
+        "supporting_quote": "Horizon Financial Planning Limited is an active UK company.",
+        "normalized_organization": "horizon financial planning limited",
+        "route": "legal_entity_registry",
+        "evidence_state": "VERIFIED_BY_AUTHORITATIVE_SOURCE",
+        "evidence_sources": [
+          {
+            "title": "Companies House",
+            "url": "https://find-and-update.company-information.service.gov.uk/company/04333954",
+            "evidence_group": "eg_a7b414fc231899c9cdbd00e7"
+          }
+        ],
+        "assignment_reason": "Companies House lists Horizon Financial Planning Limited, company 04333954, as Active."
+      },
+      {
+        "extracted_claim": "Our official website is ipohorizon.com and our contact number is [REDACTED NUMBER].",
+        "supporting_quote": "Our official website is ipohorizon.com and our contact number is [REDACTED NUMBER].",
+        "normalized_organization": "ipo horizon",
+        "route": "regulator_contact_comparison",
+        "evidence_state": "CONTRADICTED_BY_AUTHORITATIVE_SOURCE",
+        "evidence_sources": [
+          {
+            "title": "Financial Conduct Authority",
+            "url": "https://www.fca.org.uk/news/warnings/ipo-horizon-clone-fca-authorised-firm",
+            "evidence_group": "eg_df84207c67a221f5ddc0dcae"
+          },
+          {
+            "title": "Financial Conduct Authority",
+            "url": "https://www.fca.org.uk/news/warnings/ipo-horizon-clone-fca-authorised-firm",
+            "evidence_group": "eg_df84207c67a221f5ddc0dcae"
+          },
+          {
+            "title": "Authoritative RDAP",
+            "url": "https://rdap.verisign.com/com/v1/domain/ipohorizon.com",
+            "evidence_group": "eg_5a73136dd64b84acc31e9679"
+          }
+        ],
+        "assignment_reason": "The supplied domain/contact differs from the FCA-published genuine firm's contact details."
+      }
+    ],
+    "counts": {
+      "CONTRADICTED_BY_AUTHORITATIVE_SOURCE": 2,
+      "VERIFIED_BY_AUTHORITATIVE_SOURCE": 2
+    },
+    "latency_seconds": 10.072,
+    "routing_normalizations": [
+      {
+        "claim_id": "c1",
+        "original_kind": "representation",
+        "original_route": "identity_boundary",
+        "normalized_kind": "clone_affiliation",
+        "normalized_route": "regulator_clone_warning",
+        "evidence_id": "e1",
+        "evidence_group_id": "eg_df84207c67a221f5ddc0dcae",
+        "reason": "Exact named entities and explicit representation relationship match the validated regulator warning."
+      }
+    ],
+    "failure_reason": null
+  },
+  {
+    "run": 2,
+    "http_status": 200,
+    "checks": {
+      "http_200": true,
+      "live_model_ran": true,
+      "affiliation_routed": true,
+      "contact_bound": true,
+      "no_fabricated_evidence": true
+    },
+    "result": "PASS",
+    "claims": [
+      {
+        "extracted_claim": "We are IPO Horizon, representing Horizon Financial Planning Limited.",
+        "supporting_quote": "We are IPO Horizon, representing Horizon Financial Planning Limited.",
+        "normalized_organization": "ipo horizon",
+        "route": "regulator_clone_warning",
+        "evidence_state": "CONTRADICTED_BY_AUTHORITATIVE_SOURCE",
+        "evidence_sources": [
+          {
+            "title": "Financial Conduct Authority",
+            "url": "https://www.fca.org.uk/news/warnings/ipo-horizon-clone-fca-authorised-firm",
+            "evidence_group": "eg_df84207c67a221f5ddc0dcae"
+          }
+        ],
+        "assignment_reason": "FCA identifies IPO Horizon as a clone and expressly says the genuine authorised firm has no connection with it."
+      },
+      {
+        "extracted_claim": "Horizon Financial Planning Limited is FCA authorised with Firm Reference Number 307222.",
+        "supporting_quote": "Horizon Financial Planning Limited is FCA authorised with Firm Reference Number 307222.",
+        "normalized_organization": "horizon financial planning limited",
+        "route": "regulator_record_lookup",
+        "evidence_state": "VERIFIED_BY_AUTHORITATIVE_SOURCE",
+        "evidence_sources": [
+          {
+            "title": "Financial Conduct Authority",
+            "url": "https://www.fca.org.uk/news/warnings/ipo-horizon-clone-fca-authorised-firm",
+            "evidence_group": "eg_df84207c67a221f5ddc0dcae"
+          }
+        ],
+        "assignment_reason": "FCA's warning identifies Horizon Financial Planning Limited as the genuine authorised firm with FRN 307222."
+      },
+      {
+        "extracted_claim": "Horizon Financial Planning Limited is an active UK company.",
+        "supporting_quote": "Horizon Financial Planning Limited is an active UK company.",
+        "normalized_organization": "horizon financial planning limited",
+        "route": "legal_entity_registry",
+        "evidence_state": "VERIFIED_BY_AUTHORITATIVE_SOURCE",
+        "evidence_sources": [
+          {
+            "title": "Companies House",
+            "url": "https://find-and-update.company-information.service.gov.uk/company/04333954",
+            "evidence_group": "eg_a7b414fc231899c9cdbd00e7"
+          }
+        ],
+        "assignment_reason": "Companies House lists Horizon Financial Planning Limited, company 04333954, as Active."
+      },
+      {
+        "extracted_claim": "Our official website is ipohorizon.com and our contact number is [REDACTED NUMBER].",
+        "supporting_quote": "Our official website is ipohorizon.com and our contact number is [REDACTED NUMBER].",
+        "normalized_organization": "ipo horizon",
+        "route": "regulator_contact_comparison",
+        "evidence_state": "CONTRADICTED_BY_AUTHORITATIVE_SOURCE",
+        "evidence_sources": [
+          {
+            "title": "Financial Conduct Authority",
+            "url": "https://www.fca.org.uk/news/warnings/ipo-horizon-clone-fca-authorised-firm",
+            "evidence_group": "eg_df84207c67a221f5ddc0dcae"
+          },
+          {
+            "title": "Financial Conduct Authority",
+            "url": "https://www.fca.org.uk/news/warnings/ipo-horizon-clone-fca-authorised-firm",
+            "evidence_group": "eg_df84207c67a221f5ddc0dcae"
+          },
+          {
+            "title": "Authoritative RDAP",
+            "url": "https://rdap.verisign.com/com/v1/domain/ipohorizon.com",
+            "evidence_group": "eg_5a73136dd64b84acc31e9679"
+          }
+        ],
+        "assignment_reason": "The supplied domain/contact differs from the FCA-published genuine firm's contact details."
+      }
+    ],
+    "counts": {
+      "CONTRADICTED_BY_AUTHORITATIVE_SOURCE": 2,
+      "VERIFIED_BY_AUTHORITATIVE_SOURCE": 2
+    },
+    "latency_seconds": 8.632,
+    "routing_normalizations": [
+      {
+        "claim_id": "c1",
+        "original_kind": "representation",
+        "original_route": "identity_boundary",
+        "normalized_kind": "clone_affiliation",
+        "normalized_route": "regulator_clone_warning",
+        "evidence_id": "e1",
+        "evidence_group_id": "eg_df84207c67a221f5ddc0dcae",
+        "reason": "Exact named entities and explicit representation relationship match the validated regulator warning."
+      }
+    ],
+    "failure_reason": null
+  },
+  {
+    "run": 3,
+    "http_status": 200,
+    "checks": {
+      "http_200": true,
+      "live_model_ran": true,
+      "affiliation_routed": true,
+      "contact_bound": true,
+      "no_fabricated_evidence": true
+    },
+    "result": "PASS",
+    "claims": [
+      {
+        "extracted_claim": "We are IPO Horizon, representing Horizon Financial Planning Limited.",
+        "supporting_quote": "We are IPO Horizon, representing Horizon Financial Planning Limited.",
+        "normalized_organization": "ipo horizon",
+        "route": "regulator_clone_warning",
+        "evidence_state": "CONTRADICTED_BY_AUTHORITATIVE_SOURCE",
+        "evidence_sources": [
+          {
+            "title": "Financial Conduct Authority",
+            "url": "https://www.fca.org.uk/news/warnings/ipo-horizon-clone-fca-authorised-firm",
+            "evidence_group": "eg_df84207c67a221f5ddc0dcae"
+          }
+        ],
+        "assignment_reason": "FCA identifies IPO Horizon as a clone and expressly says the genuine authorised firm has no connection with it."
+      },
+      {
+        "extracted_claim": "Horizon Financial Planning Limited is FCA authorised with Firm Reference Number 307222.",
+        "supporting_quote": "Horizon Financial Planning Limited is FCA authorised with Firm Reference Number 307222.",
+        "normalized_organization": "horizon financial planning limited",
+        "route": "regulator_record_lookup",
+        "evidence_state": "VERIFIED_BY_AUTHORITATIVE_SOURCE",
+        "evidence_sources": [
+          {
+            "title": "Financial Conduct Authority",
+            "url": "https://www.fca.org.uk/news/warnings/ipo-horizon-clone-fca-authorised-firm",
+            "evidence_group": "eg_df84207c67a221f5ddc0dcae"
+          }
+        ],
+        "assignment_reason": "FCA's warning identifies Horizon Financial Planning Limited as the genuine authorised firm with FRN 307222."
+      },
+      {
+        "extracted_claim": "Horizon Financial Planning Limited is an active UK company.",
+        "supporting_quote": "Horizon Financial Planning Limited is an active UK company.",
+        "normalized_organization": "horizon financial planning limited",
+        "route": "legal_entity_registry",
+        "evidence_state": "VERIFIED_BY_AUTHORITATIVE_SOURCE",
+        "evidence_sources": [
+          {
+            "title": "Companies House",
+            "url": "https://find-and-update.company-information.service.gov.uk/company/04333954",
+            "evidence_group": "eg_a7b414fc231899c9cdbd00e7"
+          }
+        ],
+        "assignment_reason": "Companies House lists Horizon Financial Planning Limited, company 04333954, as Active."
+      },
+      {
+        "extracted_claim": "Our official website is ipohorizon.com and our contact number is [REDACTED NUMBER].",
+        "supporting_quote": "Our official website is ipohorizon.com and our contact number is [REDACTED NUMBER].",
+        "normalized_organization": "ipo horizon",
+        "route": "regulator_contact_comparison",
+        "evidence_state": "CONTRADICTED_BY_AUTHORITATIVE_SOURCE",
+        "evidence_sources": [
+          {
+            "title": "Financial Conduct Authority",
+            "url": "https://www.fca.org.uk/news/warnings/ipo-horizon-clone-fca-authorised-firm",
+            "evidence_group": "eg_df84207c67a221f5ddc0dcae"
+          },
+          {
+            "title": "Financial Conduct Authority",
+            "url": "https://www.fca.org.uk/news/warnings/ipo-horizon-clone-fca-authorised-firm",
+            "evidence_group": "eg_df84207c67a221f5ddc0dcae"
+          },
+          {
+            "title": "Authoritative RDAP",
+            "url": "https://rdap.verisign.com/com/v1/domain/ipohorizon.com",
+            "evidence_group": "eg_5a73136dd64b84acc31e9679"
+          }
+        ],
+        "assignment_reason": "The supplied domain/contact differs from the FCA-published genuine firm's contact details."
+      }
+    ],
+    "counts": {
+      "CONTRADICTED_BY_AUTHORITATIVE_SOURCE": 2,
+      "VERIFIED_BY_AUTHORITATIVE_SOURCE": 2
+    },
+    "latency_seconds": 5.501,
+    "routing_normalizations": [
+      {
+        "claim_id": "c1",
+        "original_kind": "representation",
+        "original_route": "identity_boundary",
+        "normalized_kind": "clone_affiliation",
+        "normalized_route": "regulator_clone_warning",
+        "evidence_id": "e1",
+        "evidence_group_id": "eg_df84207c67a221f5ddc0dcae",
+        "reason": "Exact named entities and explicit representation relationship match the validated regulator warning."
+      }
+    ],
+    "failure_reason": null
+  },
+  {
+    "run": 4,
+    "http_status": 200,
+    "checks": {
+      "http_200": true,
+      "live_model_ran": true,
+      "affiliation_routed": true,
+      "contact_bound": true,
+      "no_fabricated_evidence": true
+    },
+    "result": "PASS",
+    "claims": [
+      {
+        "extracted_claim": "We are IPO Horizon, representing Horizon Financial Planning Limited.",
+        "supporting_quote": "We are IPO Horizon, representing Horizon Financial Planning Limited.",
+        "normalized_organization": "ipo horizon",
+        "route": "regulator_clone_warning",
+        "evidence_state": "CONTRADICTED_BY_AUTHORITATIVE_SOURCE",
+        "evidence_sources": [
+          {
+            "title": "Financial Conduct Authority",
+            "url": "https://www.fca.org.uk/news/warnings/ipo-horizon-clone-fca-authorised-firm",
+            "evidence_group": "eg_df84207c67a221f5ddc0dcae"
+          }
+        ],
+        "assignment_reason": "FCA identifies IPO Horizon as a clone and expressly says the genuine authorised firm has no connection with it."
+      },
+      {
+        "extracted_claim": "Horizon Financial Planning Limited is FCA authorised with Firm Reference Number 307222.",
+        "supporting_quote": "Horizon Financial Planning Limited is FCA authorised with Firm Reference Number 307222.",
+        "normalized_organization": "horizon financial planning limited",
+        "route": "regulator_record_lookup",
+        "evidence_state": "VERIFIED_BY_AUTHORITATIVE_SOURCE",
+        "evidence_sources": [
+          {
+            "title": "Financial Conduct Authority",
+            "url": "https://www.fca.org.uk/news/warnings/ipo-horizon-clone-fca-authorised-firm",
+            "evidence_group": "eg_df84207c67a221f5ddc0dcae"
+          }
+        ],
+        "assignment_reason": "FCA's warning identifies Horizon Financial Planning Limited as the genuine authorised firm with FRN 307222."
+      },
+      {
+        "extracted_claim": "Horizon Financial Planning Limited is an active UK company.",
+        "supporting_quote": "Horizon Financial Planning Limited is an active UK company.",
+        "normalized_organization": "horizon financial planning limited",
+        "route": "legal_entity_registry",
+        "evidence_state": "VERIFIED_BY_AUTHORITATIVE_SOURCE",
+        "evidence_sources": [
+          {
+            "title": "Companies House",
+            "url": "https://find-and-update.company-information.service.gov.uk/company/04333954",
+            "evidence_group": "eg_a7b414fc231899c9cdbd00e7"
+          }
+        ],
+        "assignment_reason": "Companies House lists Horizon Financial Planning Limited, company 04333954, as Active."
+      },
+      {
+        "extracted_claim": "Our official website is ipohorizon.com and our contact number is [REDACTED NUMBER].",
+        "supporting_quote": "Our official website is ipohorizon.com and our contact number is [REDACTED NUMBER].",
+        "normalized_organization": "horizon financial planning limited",
+        "route": "regulator_contact_comparison",
+        "evidence_state": "CONTRADICTED_BY_AUTHORITATIVE_SOURCE",
+        "evidence_sources": [
+          {
+            "title": "Financial Conduct Authority",
+            "url": "https://www.fca.org.uk/news/warnings/ipo-horizon-clone-fca-authorised-firm",
+            "evidence_group": "eg_df84207c67a221f5ddc0dcae"
+          },
+          {
+            "title": "Financial Conduct Authority",
+            "url": "https://www.fca.org.uk/news/warnings/ipo-horizon-clone-fca-authorised-firm",
+            "evidence_group": "eg_df84207c67a221f5ddc0dcae"
+          },
+          {
+            "title": "Authoritative RDAP",
+            "url": "https://rdap.verisign.com/com/v1/domain/ipohorizon.com",
+            "evidence_group": "eg_5a73136dd64b84acc31e9679"
+          }
+        ],
+        "assignment_reason": "The supplied domain/contact differs from the FCA-published genuine firm's contact details."
+      }
+    ],
+    "counts": {
+      "CONTRADICTED_BY_AUTHORITATIVE_SOURCE": 2,
+      "VERIFIED_BY_AUTHORITATIVE_SOURCE": 2
+    },
+    "latency_seconds": 8.036,
+    "routing_normalizations": [
+      {
+        "claim_id": "c1",
+        "original_kind": "representation",
+        "original_route": "identity_boundary",
+        "normalized_kind": "clone_affiliation",
+        "normalized_route": "regulator_clone_warning",
+        "evidence_id": "e1",
+        "evidence_group_id": "eg_df84207c67a221f5ddc0dcae",
+        "reason": "Exact named entities and explicit representation relationship match the validated regulator warning."
+      }
+    ],
+    "failure_reason": null
+  },
+  {
+    "run": 5,
+    "http_status": 200,
+    "checks": {
+      "http_200": true,
+      "live_model_ran": true,
+      "affiliation_routed": true,
+      "contact_bound": true,
+      "no_fabricated_evidence": true
+    },
+    "result": "PASS",
+    "claims": [
+      {
+        "extracted_claim": "We are IPO Horizon, representing Horizon Financial Planning Limited.",
+        "supporting_quote": "We are IPO Horizon, representing Horizon Financial Planning Limited.",
+        "normalized_organization": "ipo horizon",
+        "route": "regulator_clone_warning",
+        "evidence_state": "CONTRADICTED_BY_AUTHORITATIVE_SOURCE",
+        "evidence_sources": [
+          {
+            "title": "Financial Conduct Authority",
+            "url": "https://www.fca.org.uk/news/warnings/ipo-horizon-clone-fca-authorised-firm",
+            "evidence_group": "eg_df84207c67a221f5ddc0dcae"
+          }
+        ],
+        "assignment_reason": "FCA identifies IPO Horizon as a clone and expressly says the genuine authorised firm has no connection with it."
+      },
+      {
+        "extracted_claim": "Horizon Financial Planning Limited is FCA authorised with Firm Reference Number 307222.",
+        "supporting_quote": "Horizon Financial Planning Limited is FCA authorised with Firm Reference Number 307222.",
+        "normalized_organization": "horizon financial planning limited",
+        "route": "regulator_record_lookup",
+        "evidence_state": "VERIFIED_BY_AUTHORITATIVE_SOURCE",
+        "evidence_sources": [
+          {
+            "title": "Financial Conduct Authority",
+            "url": "https://www.fca.org.uk/news/warnings/ipo-horizon-clone-fca-authorised-firm",
+            "evidence_group": "eg_df84207c67a221f5ddc0dcae"
+          }
+        ],
+        "assignment_reason": "FCA's warning identifies Horizon Financial Planning Limited as the genuine authorised firm with FRN 307222."
+      },
+      {
+        "extracted_claim": "Horizon Financial Planning Limited is an active UK company.",
+        "supporting_quote": "Horizon Financial Planning Limited is an active UK company.",
+        "normalized_organization": "horizon financial planning limited",
+        "route": "legal_entity_registry",
+        "evidence_state": "VERIFIED_BY_AUTHORITATIVE_SOURCE",
+        "evidence_sources": [
+          {
+            "title": "Companies House",
+            "url": "https://find-and-update.company-information.service.gov.uk/company/04333954",
+            "evidence_group": "eg_a7b414fc231899c9cdbd00e7"
+          }
+        ],
+        "assignment_reason": "Companies House lists Horizon Financial Planning Limited, company 04333954, as Active."
+      },
+      {
+        "extracted_claim": "Our official website is ipohorizon.com and our contact number is [REDACTED NUMBER].",
+        "supporting_quote": "Our official website is ipohorizon.com and our contact number is [REDACTED NUMBER].",
+        "normalized_organization": "horizon financial planning limited",
+        "route": "regulator_contact_comparison",
+        "evidence_state": "CONTRADICTED_BY_AUTHORITATIVE_SOURCE",
+        "evidence_sources": [
+          {
+            "title": "Financial Conduct Authority",
+            "url": "https://www.fca.org.uk/news/warnings/ipo-horizon-clone-fca-authorised-firm",
+            "evidence_group": "eg_df84207c67a221f5ddc0dcae"
+          },
+          {
+            "title": "Financial Conduct Authority",
+            "url": "https://www.fca.org.uk/news/warnings/ipo-horizon-clone-fca-authorised-firm",
+            "evidence_group": "eg_df84207c67a221f5ddc0dcae"
+          },
+          {
+            "title": "Authoritative RDAP",
+            "url": "https://rdap.verisign.com/com/v1/domain/ipohorizon.com",
+            "evidence_group": "eg_5a73136dd64b84acc31e9679"
+          }
+        ],
+        "assignment_reason": "The supplied domain/contact differs from the FCA-published genuine firm's contact details."
+      }
+    ],
+    "counts": {
+      "CONTRADICTED_BY_AUTHORITATIVE_SOURCE": 2,
+      "VERIFIED_BY_AUTHORITATIVE_SOURCE": 2
+    },
+    "latency_seconds": 5.317,
+    "routing_normalizations": [
+      {
+        "claim_id": "c1",
+        "original_kind": "representation",
+        "original_route": "identity_boundary",
+        "normalized_kind": "clone_affiliation",
+        "normalized_route": "regulator_clone_warning",
+        "evidence_id": "e1",
+        "evidence_group_id": "eg_df84207c67a221f5ddc0dcae",
+        "reason": "Exact named entities and explicit representation relationship match the validated regulator warning."
+      }
+    ],
+    "failure_reason": null
+  }
+]
