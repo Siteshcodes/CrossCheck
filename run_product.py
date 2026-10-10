@@ -2,6 +2,7 @@
 import argparse
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 import json
+import os
 from pathlib import Path
 import threading
 from urllib.error import HTTPError
@@ -25,7 +26,7 @@ def make_live_engine():
         policy_verifier=PolicyVerifier("live"),domain_verifier=DomainVerifier("live"))
 
 
-def make_product_server(api_server,port=8080,annotated_example=False,dist=DIST):
+def make_product_server(api_server,port=8080,annotated_example=False,dist=DIST,host="127.0.0.1"):
     fixture=json.loads((ROOT/"fixtures/clone_firm/request.json").read_text(encoding="utf-8"))
     class Handler(SimpleHTTPRequestHandler):
         def __init__(self,*args,**kwargs): super().__init__(*args,directory=str(dist),**kwargs)
@@ -73,21 +74,28 @@ def make_product_server(api_server,port=8080,annotated_example=False,dist=DIST):
             except Exception as exc:
                 self.send_json(502,{"status":"backend_unavailable","error":{"type":type(exc).__name__,"message":str(exc)}})
         def log_message(self,*args): pass
-    return ThreadingHTTPServer(("127.0.0.1",port),Handler)
+    return ThreadingHTTPServer((host,port),Handler)
+
+
+def parse_args(argv=None):
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--port",type=int,default=os.environ.get("PORT",8080))
+    parser.add_argument("--host",default=os.environ.get("HOST","127.0.0.1"))
+    parser.add_argument("--annotated-example",action="store_true",help="Explicit manual extraction for the exact example; evidence checks still run live. No silent fallback.")
+    args=parser.parse_args(argv)
+    if not 0<=args.port<=65535: parser.error("Port must be between 0 and 65535")
+    return args
 
 
 def main():
-    parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--port",type=int,default=8080)
-    parser.add_argument("--annotated-example",action="store_true",help="Explicit manual extraction for the exact example; evidence checks still run live. No silent fallback.")
-    args=parser.parse_args()
-    if not (DIST/"index.html").is_file(): parser.error("Build frontend first: npm --prefix web run build")
+    args=parse_args()
+    if not (DIST/"index.html").is_file(): raise SystemExit("Build frontend first: npm --prefix web run build")
     engine=make_live_engine()
     print("OPENAI_API_KEY available: "+str(bool(engine.extractor.client.api_key)).lower(),flush=True)
     api=make_server(engine,port=0,allow_annotations=args.annotated_example)
     worker=threading.Thread(target=api.serve_forever,daemon=True);worker.start()
-    app=make_product_server(api,args.port,args.annotated_example)
-    print(f"CrossCheck workbench: http://127.0.0.1:{app.server_port}",flush=True)
+    app=make_product_server(api,args.port,args.annotated_example,host=args.host)
+    print(f"CrossCheck workbench: http://{args.host}:{app.server_port}",flush=True)
     print("Extraction: "+("explicit analyst annotations for the example; custom text uses live LLM" if args.annotated_example else "live LLM"),flush=True)
     try: app.serve_forever()
     except KeyboardInterrupt: pass

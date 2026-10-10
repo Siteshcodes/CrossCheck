@@ -1,0 +1,23 @@
+.git
+.env
+.env.*
+!.env.example
+node_modules
+**/node_modules
+web/dist
+**/__pycache__
+*.pyc
+**/*.pyc
+*.pyo
+**/*.pyo
+original_msg.eml
+results
+# Offline UI tests import saved result captures; production assets do not.
+web/src/*.test.tsx
+web/src/**/*.test.tsx
+.venv
+venv
+*.key
+.DS_Store
+Thumbs.db
+web/*.tsbuildinfo
