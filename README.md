@@ -200,5 +200,5 @@ Built for **ForgeHacks Online 2026**, **Cybersecurity** track. CrossCheck focuse
 
 ## Demo
 
-Demo video: Coming soon  
-Live demo: Coming soon
+🎥 **Demo video:** https://youtu.be/DaAV7z2Brz0  
+🌐 **Live demo:** https://crosscheck-1.onrender.com/
