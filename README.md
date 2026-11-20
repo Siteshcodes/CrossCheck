@@ -72,6 +72,15 @@ flowchart TD
 - **Verify:** adapters retrieve evidence; code compares records and assigns states.
 - **Correlate and explain:** preserve source groups, limitations and the distinction between genuine facts and sender identity.
 
+The verification algorithm uses a fixed route table and explicit comparison rules:
+
+1. Validate bounded JSON, allowed fields, polarity, exact input spans and whole-domain literals. The model cannot supply states or choose evidence URLs.
+2. Remove only exact duplicate assertions. Different FRNs, company numbers or contact values remain separate claims.
+3. Route each claim to its implemented adapter. Mixed regulator, recruitment and RDAP inputs keep their own routes; extraction runs once.
+4. Parse authoritative records within known HTML fields. Repeated/conflicting fields, changed layouts, malformed responses and fetch failures become evidence gaps.
+5. Compare the precise proposition: named firm/FRN, active company/optional company number, explicit clone relationship, or published contact details. Curated legal/regulatory verification accepts narrow affirmative wording; unsupported qualifiers and compound claims stay unresolved.
+6. Attach evidence IDs and a stable underlying source group. Derived FCA comparisons share their parent warning's group. Company existence never overrides a contradicted affiliation.
+
 Adapters have different scopes; the clone-firm flagship does not use email authentication or policy checks.
 
 | Canonical evidence state | Human meaning |
@@ -126,9 +135,15 @@ CrossCheck/
 
 ## Validation
 
-Recorded checks: **87 Python regression tests passed**, **13 frontend tests passed**, lint passed, production build passed.
+Audit on **19–20 November 2026**: **134 Python tests passed**, **22 frontend tests passed**, lint and production build passed, and `npm audit` reported **0 vulnerabilities**. Baseline before these changes: 90 Python and 13 frontend tests. See [executed validation](docs/VALIDATION.md) and the [prioritized audit](docs/AUDIT.md).
 
-The [five consecutive live flagship runs](results/live-flagship-five-runs.json) each returned HTTP 200, executed the real model, and produced four claims: two verified, two contradicted, zero unresolved. Observed end-to-end latencies were **10.07s, 8.63s, 5.50s, 8.04s and 5.32s**: approximately **5.32–10.07 seconds**.
+A fresh **annotated extraction + live public sources** run returned **2 verified, 2 contradicted, 0 unresolved**, across **3 source groups**, in **3.894 seconds**. This is one observation with analyst annotations, not model latency or a performance improvement. [Recorded source results](results/audit-public-sources.json).
+
+`python check_product_live.py` was executed but exited **1 / SKIPPED**: `OPENAI_API_KEY` was unavailable in the environment and repository `.env`. No live model response was fabricated. The [current release-check artifact](results/product-live-extraction-check.json) records the blocker. Configure a private key and rerun before claiming a fresh live-model release pass.
+
+### Historical measurements
+
+The previously recorded [five consecutive live flagship runs](results/live-flagship-five-runs.json) each returned HTTP 200, executed the real model, and produced four claims: two verified, two contradicted, zero unresolved. Historical latencies were **10.07s, 8.63s, 5.50s, 8.04s and 5.32s**. These predate the audit and were not repeated here.
 
 Counts are backend-derived, not hard-coded. No fabricated evidence or silent fixture fallback was used.
 
@@ -140,9 +155,15 @@ Company existence, regulatory registration and a registered domain do not authen
 
 **Unknown is a valid result.** `NO_AUTHORITATIVE_DATA` preserves a gap rather than converting uncertainty into a contradiction.
 
+Outbound evidence requests use HTTPS on port 443, public DNS addresses checked at connection time, TLS hostname verification and restricted redirects. Suspicious websites are not fetched. Public GETs have at most two attempts with a 250 ms backoff; paid model POSTs are not automatically retried. An investigation has a 32-request budget and a cooperative 90-second outbound time budget. DNS and blocking socket operations can exceed that cooperative budget; it is not a hard wall-clock guarantee.
+
+The local API limits messages to 64,000 characters, request bodies to 4 MB, email bytes to 2 MB and JSON nesting to 64 levels. Each server admits at most 8 connection workers; the backend runs at most 4 investigations concurrently and returns JSON 503 when saturated. Investigation requests reject cross-origin browser submissions; loopback servers require loopback Host values to guard against DNS rebinding. These are resource bounds and origin checks, not per-user authentication or rate limits. Do not expose the prototype as an unrestricted public paid-API proxy.
+
+Live extraction sends submitted communication to OpenAI (`store: false`); this flag is not a promise of zero provider retention. The app keeps no investigation database. Responses and explicit CLI exports include the submitted text and source evidence, and email analysis includes sensitive headers. Keep exports private. Logs contain request IDs/status/byte counts, not communication text. API failures omit raw provider payloads and unexpected exception messages. Credentials remain server-side.
+
 ## Run Locally
 
-Requirements: Python 3.10+, Node.js/npm compatible with Vite 7, an OpenAI API key and internet access.
+Requirements: Python 3.10+ and Node.js compatible with Vite 7 (22.12+ or 24 recommended). This audit executed on Python 3.14.7, Node 24.19.0 and npm 11.17.0. Live extraction requires an OpenAI API key and internet access; offline regression tests require neither.
 
 ```bash
 git clone https://github.com/Siteshcodes/CrossCheck.git
@@ -175,14 +196,19 @@ python -m unittest discover -s tests -v
 npm --prefix web test
 npm --prefix web run lint
 npm --prefix web run build
+npm --prefix web audit
 python check_product_live.py
 ```
 
 The live release check requires an API key and internet access. It submits flagship and manual text without fixture annotations; it is separate from offline regression tests.
 
+The flagship release gate checks grounded quotes, evidence references, shared FCA provenance and the expected two verified/two contradicted findings. HTTP 200 with unresolved claims is not a flagship pass.
+
+For an explicitly labelled demonstration without a model key, run `python run_product.py --annotated-example`. Only the exact flagship example uses analyst annotations; public evidence still runs live. Custom text requires the model. For a fully offline example of the older NVIDIA scope, use `python -m investigation demo`.
+
 ## Limitations
 
-This prototype has limited, jurisdiction-specific authoritative adapters, source availability/rate-limit dependencies and explicit email evidence boundaries. It offers no universal human identity proof. Some claims will remain unresolved.
+This prototype has limited, jurisdiction-specific authoritative adapters, source availability/rate-limit dependencies and explicit email evidence boundaries. Narrow deterministic predicate guards deliberately leave many natural-language variants unresolved. Source records can be stale or inaccurate; HTTPS does not establish their factual correctness. Prompt injection may still affect which claims are extracted or omitted, despite schema and grounding guards. Contact normalization preserves international telephone digits and does not infer local numbering conventions. No universal human identity proof or population-level fraud accuracy is established.
 
 ## Future Work
 
@@ -191,6 +217,8 @@ Additional regulatory jurisdictions and authoritative adapters; independent DNS/
 ## Research & Technical Validation
 
 Supporting research: [Feasibility report](FEASIBILITY_REPORT.md), [clone-firm feasibility](CLONE_FEASIBILITY.md), [demo hardening](DEMO_HARDENING.md), and [MVP validation](MVP_VALIDATION.md). Earlier scenario reports document experiments, not the final flagship.
+
+Engineering detail: [design decisions and trade-offs](docs/ENGINEERING_DECISIONS.md), [interview preparation and measured resume bullets](docs/INTERVIEW_NOTES.md), and [current validation](docs/VALIDATION.md).
 
 ## Hackathon
 

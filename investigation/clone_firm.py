@@ -5,10 +5,23 @@ import re
 import time
 
 from .models import Evidence, EvidenceState as State, critical_claims, grounding_issue, sha256, evidence_group
-from .regulated_firm import RegulatorVerifier, LegalEntityVerifier, FIRM, NO_CONNECTION, compare_contacts, website_domain
+from .regulated_firm import RegulatorVerifier, LegalEntityVerifier, FIRM, NO_CONNECTION, compare_contacts, claimed_phone
 from .verifiers import DomainVerifier
 
 CLONE_KINDS={"regulated_firm","regulated_contact","legal_entity","clone_affiliation"}
+REGULATED_ASSERTION = re.compile(re.escape(FIRM)+r"\s+is\s+(?:an?\s+)?(?:FCA[ -]+authori[sz]ed(?:\s+firm)?|authori[sz]ed\s+by\s+(?:the\s+)?FCA)\s+(?:with\s+)?(?:Firm Reference Number|FRN)\s*[:#]?\s*(\d{6})[.!]?", re.I)
+ACTIVE_ASSERTION = re.compile(re.escape(FIRM)+r"\s+is\s+an?\s+active\s+(?:UK\s+)?company(?:\s*,?\s*(?:with\s+)?(?:company\s+|registration\s+)?(?:number|no\.?)\s*[:#]?\s*(\d{8}))?[.!]?", re.I)
+
+
+def uses_clone_route(claim):
+    if claim.kind in CLONE_KINDS:
+        return True
+    # A representation-only extraction must reach the same warning verifier.
+    return (claim.kind == 'representation'
+            and (claim.organization or '').casefold() in {FIRM.casefold(), 'ipo horizon'}
+            and re.search(r'(?<!\w)IPO Horizon(?!\w)', claim.source_quote, re.I) is not None
+            and re.search(r'(?<!\w)'+re.escape(FIRM)+r'(?!\w)', claim.source_quote, re.I) is not None)
+
 BOUNDARIES=[
     "Input is an asserted communication, not proof that a specific person sent it.",
     "A genuine FRN and active legal entity do not authenticate IPO Horizon, its website, an individual caller or an investment.",
@@ -58,10 +71,12 @@ class CloneFirmInvestigation:
                 e=call(ident)
                 if not isinstance(e,Evidence) or e.id!=ident or not isinstance(e.evidence_state,State):
                     raise ValueError("Invalid deterministic evidence contract")
+                if e.error and e.evidence_state != State.NO_DATA:
+                    raise ValueError("Failed evidence cannot resolve a claim")
             except Exception as exc:
                 e=Evidence(ident,method,State.NO_DATA,{}, {"origin":"verifier_failure"},{},
                            ("Verifier failures remain data gaps.",),round((time.perf_counter()-started)*1000,3),
-                           {"type":type(exc).__name__,"message":str(exc)})
+                           {"type":type(exc).__name__,"message":"Verifier failed; authoritative evidence is unavailable."})
             if not e.evidence_group_id: e=replace(e,evidence_group_id=evidence_group(e,evidence))
             evidence.append(e);return e
         known=any(c.organization and c.organization.casefold()==FIRM.casefold() for c in claims)
@@ -77,7 +92,7 @@ class CloneFirmInvestigation:
                 c=replace(c,kind='clone_affiliation',verification_route='regulator_clone_warning')
             issue=grounding_issue(c,message)
             if c.kind in CLONE_KINDS:
-                if c.polarity!="positive" or re.search(r"\b(not|never|no|inactive)\b|isn[’\']t",c.source_quote,re.I):
+                if c.polarity!="positive" or re.search(r"\b(not|never|no|inactive|unauthori[sz]ed|neither|without)\b|\b\w+n[’']t\b",c.source_quote,re.I):
                     issue="Negative predicates are outside the positive curated record scope"
                 elif c.statement != c.source_quote:
                     issue="Curated regulatory/legal candidates require exact source wording; unreviewed paraphrases cannot become verified"
@@ -90,7 +105,8 @@ class CloneFirmInvestigation:
                 entities=warning_entities(fca)
                 contacts=fca.observations if entities else {}
                 in_scope=bool(entities and c.organization and c.organization.casefold() in {n.casefold() for n in entities}
-                    and contacts.get('clone_contacts',{}).get('website') and contacts.get('genuine_contacts',{}).get('website'))
+                    and contacts.get('clone_contacts',{}).get('website') and contacts.get('genuine_contacts',{}).get('website')
+                    and (c.organization.casefold()==entities[1].casefold() or any(warning_binding(candidate,fca) for candidate in claims)))
                 used=[fca.id] if fca else []
             if issue:
                 finding=issue;method="candidate_grounding_guard"
@@ -101,8 +117,8 @@ class CloneFirmInvestigation:
             elif c.kind=="regulated_firm":
                 used=[fca.id]
                 frns=re.findall(r"(?<!\d)\d{6}(?!\d)",c.source_quote)
-                if FIRM.casefold() not in c.source_quote.casefold() or "fca" not in c.source_quote.casefold() or not re.search(r"authori[sz]ed",c.source_quote,re.I) or len(frns)!=1:
-                    finding="Regulatory claim must name the firm, FCA authorisation and one literal six-digit FRN."
+                if not REGULATED_ASSERTION.fullmatch(c.source_quote.strip()) or len(frns)!=1:
+                    finding="Regulatory claim requires a supported affirmative statement naming the firm, FCA authorisation and one six-digit FRN; qualified or compound wording remains unresolved."
                     method="candidate_grounding_guard"
                 elif fca.evidence_state==State.VERIFIED:
                     state=State.VERIFIED if frns[0]==fca.observations["frn"] else State.CONTRADICTED
@@ -111,12 +127,19 @@ class CloneFirmInvestigation:
                 limits=["Verification scope is the FCA warning's published genuine-firm identity/FRN, not the contacting party or current product permissions."]
             elif c.kind=="legal_entity":
                 used=[legal.id] if legal else []
-                if FIRM.casefold() not in c.source_quote.casefold() or not re.search(r"\bactive\b",c.source_quote,re.I):
-                    finding="Active-company candidate is not grounded in an explicit named active-entity assertion."
+                numbers=re.findall(r"(?<!\w)\d{8}(?!\w)",c.source_quote)
+                number_mentioned=re.search(r"\b(?:company|registration)\s*(?:number|no\.?)\b",c.source_quote,re.I)
+                if not ACTIVE_ASSERTION.fullmatch(c.source_quote.strip()):
+                    finding="Active-company candidate requires a supported affirmative named-entity assertion; qualified, ambiguous or compound wording remains unresolved."
+                    method="candidate_grounding_guard"
+                elif len(numbers)>1 or (number_mentioned and len(numbers)!=1):
+                    finding="Company identifier is ambiguous or outside the supported eight-digit format."
                     method="candidate_grounding_guard"
                 elif legal and legal.evidence_state==State.VERIFIED:
-                    state=State.VERIFIED if legal.observations["status"].casefold()=="active" else State.CONTRADICTED
+                    number_matches=not numbers or numbers[0]==legal.observations["company_number"]
+                    state=State.VERIFIED if legal.observations["status"].casefold()=="active" and number_matches else State.CONTRADICTED
                     finding=f"Companies House lists {FIRM}, company {legal.observations['company_number']}, as {legal.observations['status']}."
+                    if not number_matches: finding+=" The asserted company number differs from that record."
                 else: finding="Legal-entity record unavailable; company activity remains unresolved."
                 limits=["A true legal-entity fact does not prove IPO Horizon represents that entity or that an investment is authorised."]
             elif c.kind=="clone_affiliation":
@@ -128,15 +151,16 @@ class CloneFirmInvestigation:
                 else: finding="A validated named-clone warning is unavailable."
                 limits=["This contradicts the named clone's organizational connection; it does not establish the personal identity of whoever supplied the text."]
             elif c.kind=="regulated_contact":
-                if not c.domain or not re.search(r"\bofficial\b",c.source_quote,re.I):
+                quoted_domains=set(re.findall(r"(?<![\w.-])(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}(?![\w.-])",c.source_quote.rstrip('.'),re.I))
+                if not c.domain or not re.search(r"\bofficial\b",c.source_quote,re.I) or len(quoted_domains)!=1:
                     method="candidate_grounding_guard";finding="Official-contact candidate requires a literal domain and official-contact assertion."
                 else:
-                    if c.domain not in domains: domains[c.domain]=add("rdap_domain_provenance",lambda ident:self.domain.verify(c.domain,ident))
-                    phones=re.findall(r"\+\d{9,15}",c.source_quote)
-                    if len(phones)>1:
-                        finding="Multiple telephone contacts cannot be unambiguously scoped to this atomic claim."
+                    try:
+                        phone=claimed_phone(c.source_quote)
+                    except ValueError as exc:
+                        finding=str(exc);method="candidate_grounding_guard"
                     else:
-                        phone=phones[0] if phones else None
+                        if c.domain not in domains: domains[c.domain]=add("rdap_domain_provenance",lambda ident:self.domain.verify(c.domain,ident))
                         key=(c.domain,phone)
                         if key not in comparisons: comparisons[key]=add("regulator_contact_comparison",lambda ident:compare_contacts(c.domain,phone,fca,ident))
                         item=comparisons[key];state=item.evidence_state;used=[fca.id,item.id,domains[c.domain].id]

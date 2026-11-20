@@ -5,3 +5,6 @@
 /* Keep supporting evidence labels legible on the light document surface. */
 .example-button{border:1px solid #bac3b0;background:#eef2e8;border-radius:3px;padding:9px 12px;font-weight:500;color:#46563b}.example-button:hover{background:#e5ecdb;border-color:#859779}
 @media(min-width:901px){.result-heading{margin:22px 0 12px}.result-heading h1{margin:7px 0 12px;font-size:37px}.result-heading>.secondary-button{margin-top:16px}.result-meta{padding:10px 0 12px}.graph-panel{padding:15px 22px 12px}.firm-heading{margin-top:12px}.firm-heading h3{font-size:24px}.relationship .claim-node{padding:11px 16px;gap:7px}.relationship .claim-node strong{font-size:23px}.identity-link{margin:12px 0}.relationship>.claim-node{padding:10px 16px;gap:6px}.contact-node{padding:12px 16px;gap:9px}.branch-bottom,.branch-bottom span{height:12px}.graph-caption{margin-top:11px}.inspector{max-height:530px}.payoff{margin:26px 0 24px}}
+
+/* Long untrusted text must remain readable on narrow screens. */
+.claim-node,.contact-node,.graph-panel,.inspector,.ledger-row>div,.submitted{min-width:0}.claim-node strong,.contact-fields strong,blockquote,.finding{overflow-wrap:anywhere}.data-notice{font-size:12px;line-height:1.7;color:#68715f;max-width:760px}.error-panel:focus{outline:2px solid #6e8065;outline-offset:4px}

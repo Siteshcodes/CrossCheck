@@ -15,7 +15,8 @@ def summarize(claims, evidence, extraction):
         # cannot count toward the judge-facing gate (even though parsing is useful).
         if e.method == "receiver_reported_spf_dkim_dmarc":
             continue
-        family = "rdap_domain_provenance" if e.method == "rdap_domain_provenance" else "official_policy_process"
+        family = ('regulator_record_lookup' if e.method.startswith('regulator_') else e.method
+                  if e.method in {'rdap_domain_provenance', 'legal_entity_registry'} else 'official_policy_process')
         group = groups.setdefault(e.evidence_group_id, {"evidence_ids": [], "mechanism": family})
         group["evidence_ids"].append(e.id)
     counts = {"independent_evidence_count": len(groups),

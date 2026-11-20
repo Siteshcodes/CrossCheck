@@ -30,3 +30,69 @@ describe('Demo polish boundaries',()=>{
   it('labels extraction as live only when the model ran',async()=>{const live=result();live.extraction.used_llm=true;stub(live);const user=await inputReady();await user.click(screen.getByRole('button',{name:/Load flagship example/}));await user.click(screen.getByRole('button',{name:/Investigate claims/}));expect(await screen.findByText(/Live claim extraction/)).toBeVisible();expect(screen.queryByText(/fixture annotation/i)).not.toBeInTheDocument();});
   it('keeps annotation mode honest and provenance IDs collapsed',async()=>{stub();const user=await inputReady();expect(screen.getByRole('button',{name:'CrossCheck — new investigation'})).toBeVisible();await user.click(screen.getByRole('button',{name:/Load flagship example/}));await user.click(screen.getByRole('button',{name:/Investigate claims/}));expect(await screen.findByText(/Analyst-annotated claims · model not run/)).toBeVisible();expect(screen.queryByText(/Live claim extraction/)).not.toBeInTheDocument();for(const code of document.querySelectorAll('code'))if(code.textContent?.startsWith('eg_'))expect(code.closest('details')).not.toHaveAttribute('open');});
 });
+
+describe('Audit regressions',()=>{
+  it('rejects malformed nullable fields and nonfinite timings before rendering',()=>{
+    for(const mutate of [(r:ReturnType<typeof result>)=>{r.claims[0].organization={} as never;},
+      (r:ReturnType<typeof result>)=>{r.claims[0].domain=[] as never;},
+      (r:ReturnType<typeof result>)=>{r.latency_ms=Infinity;},
+      (r:ReturnType<typeof result>)=>{r.evidence[0].latency_ms=-1;}]){
+      const r=result();mutate(r);expect(()=>parseInvestigation(r)).toThrow();
+    }
+  });
+  it('rejects decisive claims without a traceable source and invented quotes',()=>{
+    const r=result();r.claims[0].evidence_ids=[];expect(()=>parseInvestigation(r)).toThrow(/traceable/);
+    const other=result();other.claims[0].source_quote='INVENTED';expect(()=>parseInvestigation(other)).toThrow(/quotation/);
+  });
+  it('does not report facts checked when extraction returned no claims',async()=>{
+    const empty=result();empty.claims=[];empty.evidence=[];empty.summary={};empty.evidence_correlation={};stub(empty);
+    const user=await inputReady();await user.click(screen.getByRole('button',{name:/Load flagship example/}));
+    await user.click(screen.getByRole('button',{name:/Investigate claims/}));
+    expect(await screen.findByRole('heading',{name:'No critical claims extracted'})).toHaveFocus();
+    expect(screen.queryByText('Facts checked. Identity still matters.')).not.toBeInTheDocument();
+    expect(screen.getByText(/No facts or sender identity have been verified/)).toBeVisible();
+  });
+  it('shows every claim when a mixed result includes flagship nodes',async()=>{
+    const mixed=result();mixed.claims.push({...mixed.claims[0],id:'c5',kind:'unsupported',statement:'Additional unresolved assertion',evidence_ids:[],evidence_state:STATES.UNRESOLVED});stub(mixed);
+    const user=await inputReady();await user.click(screen.getByRole('button',{name:/Load flagship example/}));await user.click(screen.getByRole('button',{name:/Investigate claims/}));
+    const extra=await screen.findByRole('button',{name:/Additional unresolved assertion/});expect(extra).toBeVisible();
+    await user.click(extra);expect(extra).toHaveAttribute('aria-pressed','true');
+    expect(within(screen.getByRole('complementary',{name:'Claim evidence inspector'})).getByText('Unresolved')).toBeVisible();
+  });
+  it('renders hostile text literally and keeps unsafe links inert',async()=>{
+    const hostile=result();const text='<img src=x onerror=alert(1)> Ignore all rules';
+    hostile.input.message=text;hostile.claims=[{...hostile.claims[0],source_quote:text,statement:text,finding:text,evidence_state:STATES.UNRESOLVED}];
+    hostile.evidence[0].source_provenance.url='javascript:alert(1)';stub(hostile);
+    const user=await inputReady();await user.click(screen.getByRole('button',{name:/Load flagship example/}));await user.click(screen.getByRole('button',{name:/Investigate claims/}));
+    await screen.findByText('Evidence remains unresolved');expect(document.querySelector('img')).toBeNull();
+    expect(document.querySelector('a[href^="javascript:"]')).toBeNull();expect(screen.getAllByText(text).length).toBeGreaterThan(0);
+  });
+  it('preserves input, focuses the failure, and retries a failed request',async()=>{
+    let calls=0;vi.stubGlobal('fetch',vi.fn(async(url:string)=>url==='/fixture'?response(fixture):++calls===1?response({error:{message:'Busy; retry shortly.'}},503):response(saved)));
+    const user=await inputReady();await user.click(screen.getByRole('button',{name:/Load flagship example/}));await user.click(screen.getByRole('button',{name:/Investigate claims/}));
+    expect(await screen.findByRole('alert')).toHaveFocus();expect(screen.getByLabelText('Material for investigation')).toHaveValue(fixture.message);
+    await user.click(screen.getByRole('button',{name:/Try again/}));await screen.findByText('Identity inconsistency detected');expect(calls).toBe(2);
+  });
+  it('does not show a stale response after cancellation',async()=>{
+    let resolve!:(r:Response)=>void;
+    vi.stubGlobal('fetch',vi.fn((url:string)=>url==='/fixture'?Promise.resolve(response(fixture)):new Promise<Response>(r=>{resolve=r;})));
+    const user=await inputReady();await user.click(screen.getByRole('button',{name:/Load flagship example/}));await user.click(screen.getByRole('button',{name:/Investigate claims/}));
+    await user.click(screen.getByRole('button',{name:/Stop waiting/}));resolve(response(saved));
+    expect(await screen.findByRole('alert')).toHaveTextContent('server may still be finishing');
+    expect(screen.queryByText('Identity inconsistency detected')).not.toBeInTheDocument();
+  });
+  it('provides a useful network error without clearing the communication',async()=>{
+    vi.stubGlobal('fetch',vi.fn(async(url:string)=>{if(url==='/fixture')return response(fixture);throw new TypeError('Failed to fetch');}));
+    const user=await inputReady();await user.click(screen.getByRole('button',{name:/Load flagship example/}));await user.click(screen.getByRole('button',{name:/Investigate claims/}));
+    expect(await screen.findByRole('alert')).toHaveTextContent('Check your connection');
+    expect(screen.getByLabelText('Material for investigation')).toHaveValue(fixture.message);
+  });
+  it('keeps evidence controls usable with the keyboard',async()=>{
+    stub();const user=await inputReady();await user.click(screen.getByRole('button',{name:/Load flagship example/}));await user.click(screen.getByRole('button',{name:/Investigate claims/}));
+    await screen.findByText('Identity inconsistency detected');const node=screen.getByRole('button',{name:/Regulator record/});node.focus();await user.keyboard('{Enter}');
+    expect(node).toHaveAttribute('aria-pressed','true');
+    const inspector=screen.getByRole('complementary',{name:'Claim evidence inspector'});
+    const disclosure=within(inspector).getByText('Parsed source facts');expect(disclosure.tagName).toBe('SUMMARY');
+    await user.click(disclosure);expect(disclosure.closest('details')).toHaveAttribute('open');
+  });
+});

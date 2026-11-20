@@ -24,13 +24,16 @@ class ScopedHTML(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.stack=[]
         self.fields={}
+        self.duplicates=set()
     def handle_starttag(self, tag, attrs):
         attrs=dict(attrs)
         key=attrs.get("id")
         if tag=="h1": key="h1"
         if tag not in self.VOID:
             self.stack.append((tag,key))
-        if key: self.fields.setdefault(key,[])
+        if key:
+            if key in self.fields: self.duplicates.add(key)
+            self.fields.setdefault(key,[])
     def handle_endtag(self,tag):
         for i in range(len(self.stack)-1,-1,-1):
             if self.stack[i][0]==tag:
@@ -41,6 +44,8 @@ class ScopedHTML(HTMLParser):
         for _,key in self.stack:
             if key: self.fields[key].append(data)
     def text(self,key):
+        if key in self.duplicates:
+            raise ValueError("Ambiguous repeated authoritative field: "+key)
         return norm(" ".join(self.fields.get(key,[])))
 
 
@@ -53,6 +58,8 @@ def parse_fca(body):
     if NO_CONNECTION not in genuine:
         raise ValueError("FCA explicit no-connection evidence is unavailable")
     def field(text,label,next_labels):
+        if text.count(label+":") != 1:
+            raise ValueError("Ambiguous authoritative field: "+label)
         ending="|".join(re.escape(x)+":" for x in next_labels)
         match=re.search(re.escape(label)+r":\s*(.*?)(?=\s+(?:"+ending+r")|$)",text)
         if not match or not match[1].strip(): raise ValueError("FCA field missing: "+label)
@@ -77,7 +84,7 @@ def parse_company(body):
     name=parser.text("h1")
     number=parser.text("company-number")
     status=parser.text("company-status")
-    if name.casefold()!=FIRM.casefold() or number!="Company number "+COMPANY_NUMBER or not status:
+    if name.casefold()!=FIRM.casefold() or number!="Company number "+COMPANY_NUMBER or status not in {"Active", "Dissolved", "Liquidation", "Administration", "Receivership", "Voluntary arrangement", "Converted / Closed", "Insolvency Proceedings"}:
         raise ValueError("Companies House record identity/status selector is missing or changed")
     return {"legal_name":name,"company_number":COMPANY_NUMBER,"status":status,
             "exact_evidence":{"h1":name,"company-number":number,"company-status":status}}
@@ -122,6 +129,20 @@ def website_domain(value):
     host=urlsplit(value if "://" in value else "https://"+value).hostname
     host=domain_name(host or "")
     return host[4:] if host.startswith("www.") else host
+
+
+def claimed_phone(quote):
+    """Preserve international digits; never silently drop a mentioned phone field."""
+    phones = re.findall(r"(?<![\w+])\+\d[\d ()-]*\d(?!\d)", quote)
+    mentioned = re.search(r"\b(?:phone|telephone|contact number|tel)\b|\+\d", quote, re.I)
+    if len(phones) > 1 or (mentioned and len(phones) != 1):
+        raise ValueError("Telephone assertion is ambiguous or unsupported; supply one international number")
+    if not phones:
+        return None
+    phone = phones[0].strip()
+    if not re.fullmatch(r"\+\d{9,15}", re.sub(r"[\s()-]", "", phone)):
+        raise ValueError("Telephone assertion is outside the supported international format")
+    return phone
 
 
 def compare_contacts(domain,phone,record,ident):
