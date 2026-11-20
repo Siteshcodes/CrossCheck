@@ -11,9 +11,9 @@ import math
 import re
 import sys
 import time
-from urllib.error import HTTPError
 from urllib.parse import quote, urljoin, urlsplit
-from urllib.request import HTTPRedirectHandler, Request, build_opener
+from urllib.request import HTTPRedirectHandler, Request
+from safe_http import checked_https_url, secure_opener, open_get, bounded_read
 
 BOOTSTRAP = "https://data.iana.org/rdap/dns.json"
 VERIFIED = "VERIFIED_BY_AUTHORITATIVE_SOURCE"
@@ -66,9 +66,9 @@ class LoggedRedirects(HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         target = urljoin(req.full_url, newurl)
         self.evidence.append({"from": req.full_url, "to": target, "http_status": code, "headers": list(headers.items())})
-        parsed = urlsplit(target)
-        if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password:
-            raise ProbeError("RDAP redirect is not credential-free HTTPS: " + target)
+        checked_https_url(target, {urlsplit(req.full_url).hostname})
+        if len(self.evidence) > 3:
+            raise ProbeError("RDAP redirect limit exceeded")
         return super().redirect_request(req, fp, code, msg, headers, target)
 
 
@@ -77,17 +77,15 @@ def fetch_json(url, evidence, timeout, max_bytes):
     item = {"requested_url": url, "retrieved_at_utc": datetime.now(timezone.utc).isoformat(), "redirects": [], "http_status": None, "response_headers": [], "raw_body": None, "error": None}
     evidence.append(item)
     try:
+        checked_https_url(url)
         request = Request(url, headers={"User-Agent": "FeasibilityProbe/1.0 (RDAP research)", "Accept": "application/rdap+json, application/json", "Accept-Encoding": "identity"})
-        opener = build_opener(LoggedRedirects(item["redirects"]))
-        try:
-            response = opener.open(request, timeout=timeout)
-        except HTTPError as exc:
-            response = exc  # Keep the actual error response body and headers.
+        opener = secure_opener(LoggedRedirects(item["redirects"]))
+        response = open_get(opener, request, timeout, item.setdefault("attempts", []))
         with response:
             item["http_status"] = response.code
             item["final_url"] = response.geturl()
             item["response_headers"] = list(response.headers.items())
-            raw = response.read(max_bytes + 1)
+            raw = bounded_read(response, max_bytes)
         item["body_truncated"] = len(raw) > max_bytes
         raw = raw[:max_bytes]
         item["captured_bytes"] = len(raw)
@@ -99,7 +97,8 @@ def fetch_json(url, evidence, timeout, max_bytes):
         if item["body_truncated"]:
             raise ProbeError("Response exceeded --max-bytes; evidence incomplete")
         try:
-            parsed = json.loads(raw)
+            from investigation.models import strict_json
+            parsed = strict_json(raw.decode('utf-8'))
         except (ValueError, UnicodeError) as exc:
             raise ProbeError("Invalid JSON response: " + str(exc)) from exc
         if not isinstance(parsed, dict):
@@ -132,6 +131,7 @@ def select_service(bootstrap, domain):
                         raise ProbeError("Malformed bootstrap URL")
                     p = urlsplit(url)
                     if p.scheme == "https" and p.hostname and not p.username and not p.password and not p.query and not p.fragment and url.endswith("/"):
+                        checked_https_url(url)
                         candidates.append((len(suffix.split(".")), suffix, url))
     if not candidates:
         raise ProbeError("No HTTPS RDAP service in the IANA bootstrap for this domain")
@@ -181,7 +181,7 @@ def run_case(domain, organization, official, args):
             "RDAP records current registration metadata; registration age is not proof of ownership continuity, sender identity, or legitimacy.",
             "Registry responses can redact registrants. Registrar identity is not registrant identity. No registrar referral or historical WHOIS lookup is performed.",
             "The exact supplied domain is queried. A subdomain is not silently replaced with a registrable parent.",
-            "One selected HTTPS service, no cache/retries/hidden fallback. Timeout bounds each blocking socket operation, not total wall time.",
+            "One selected HTTPS service, at most two GET attempts, same-host redirects only, no cached-success fallback. Socket/DNS timing is not a strict total-run deadline.",
         ],
         "status": "FAIL", "failure_reason": None,
     }

@@ -1,7 +1,8 @@
 """Serve the built workbench and proxy the frozen investigation API on the same origin."""
 import argparse
-from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+from http.server import SimpleHTTPRequestHandler
 import json
+import logging
 import os
 from pathlib import Path
 import threading
@@ -9,10 +10,11 @@ from urllib.error import HTTPError
 from urllib.parse import urlsplit
 from urllib.request import Request, urlopen
 
-from investigation.api import make_server, MAX_REQUEST_BYTES
+from investigation.api import make_server
 from investigation.engine import InvestigationEngine
 from investigation.verifiers import DomainVerifier, PolicyVerifier
 from investigation.llm import LLMExtractor, OpenAIClient
+from investigation.http_support import BoundedHTTPServer, HTTPProblem, read_body, send_json, error_payload
 
 ROOT=Path(__file__).resolve().parent
 DIST=ROOT/"web/dist"
@@ -31,13 +33,12 @@ def make_product_server(api_server,port=8080,annotated_example=False,dist=DIST,h
     class Handler(SimpleHTTPRequestHandler):
         def __init__(self,*args,**kwargs): super().__init__(*args,directory=str(dist),**kwargs)
         def send_json(self,status,body):
-            data=json.dumps(body,ensure_ascii=True).encode()
-            self.send_response(status);self.send_header("Content-Type","application/json")
-            self.send_header("Content-Length",str(len(data)));self.end_headers();self.wfile.write(data)
+            send_json(self,status,body)
         def end_headers(self):
             self.send_header("Cache-Control","no-store")
             self.send_header("X-Content-Type-Options","nosniff")
             self.send_header("Referrer-Policy","no-referrer")
+            self.send_header("Content-Security-Policy","default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'")
             super().end_headers()
         def do_GET(self):
             path=urlsplit(self.path).path
@@ -50,18 +51,15 @@ def make_product_server(api_server,port=8080,annotated_example=False,dist=DIST,h
                 return self.send_error(404,"Not found")
             return super().do_GET()
         def do_POST(self):
-            if self.path!="/investigate": return self.send_json(404,{"error":"Unknown endpoint"})
-            lengths=self.headers.get_all("Content-Length",[])
-            if self.headers.get("Transfer-Encoding") or len(lengths)!=1 or not lengths[0].isdigit():
-                return self.send_json(400,{"status":"invalid_input","error":{"message":"Exactly one numeric Content-Length required"}})
-            size=int(lengths[0])
-            if not 0<size<=MAX_REQUEST_BYTES:
-                return self.send_json(413,{"error":{"message":"Request body too large or empty"}})
-            if self.headers.get_content_type()!="application/json":
-                return self.send_json(415,{"error":{"message":"Content-Type must be application/json"}})
-            self.connection.settimeout(15)
-            body=self.rfile.read(size)
-            if len(body)!=size: return self.send_json(400,{"error":{"message":"Incomplete request body"}})
+            if self.path!="/investigate": return self.send_json(404,error_payload('not_found','UnknownEndpoint','Use POST /investigate'))
+            try:
+                body=read_body(self)
+            except HTTPProblem as exc:
+                return self.send_json(exc.code,error_payload('invalid_input','InvalidRequest',str(exc)))
+            except TimeoutError:
+                return self.send_json(408,error_payload('request_timeout','RequestTimeout','Request body timed out'))
+            except (BrokenPipeError,ConnectionResetError):
+                return
             try:
                 req=Request(f"http://127.0.0.1:{api_server.server_port}/investigate",data=body,headers={"Content-Type":"application/json"},method="POST")
                 try: response=urlopen(req,timeout=120)
@@ -69,12 +67,14 @@ def make_product_server(api_server,port=8080,annotated_example=False,dist=DIST,h
                 with response:
                     status=response.status;data=response.read()
                 self.send_response(status);self.send_header("Content-Type","application/json")
+                for name in ('X-Request-ID','Retry-After'):
+                    if response.headers.get(name): self.send_header(name,response.headers[name])
                 self.send_header("Content-Length",str(len(data)));self.end_headers();self.wfile.write(data)
             except (BrokenPipeError,ConnectionResetError): pass
-            except Exception as exc:
-                self.send_json(502,{"status":"backend_unavailable","error":{"type":type(exc).__name__,"message":str(exc)}})
+            except Exception:
+                self.send_json(502,error_payload('backend_unavailable','BackendUnavailable','The investigation backend is unavailable or timed out. Retry later.'))
         def log_message(self,*args): pass
-    return ThreadingHTTPServer((host,port),Handler)
+    return BoundedHTTPServer((host,port),Handler)
 
 
 def parse_args(argv=None):
@@ -89,6 +89,7 @@ def parse_args(argv=None):
 
 def main():
     args=parse_args()
+    logging.basicConfig(level=logging.INFO,format='%(levelname)s %(name)s %(message)s')
     if not (DIST/"index.html").is_file(): raise SystemExit("Build frontend first: npm --prefix web run build")
     engine=make_live_engine()
     print("OPENAI_API_KEY available: "+str(bool(engine.extractor.client.api_key)).lower(),flush=True)

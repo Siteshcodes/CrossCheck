@@ -168,6 +168,8 @@ class VisibleText(html.parser.HTMLParser):
 
 
 def checked_url(url, hosts):
+    from safe_http import checked_https_url
+    checked_https_url(url, hosts)
     parsed = urllib.parse.urlsplit(url)
     try:
         port = parsed.port
@@ -186,28 +188,28 @@ class CheckedRedirect(urllib.request.HTTPRedirectHandler):
     def redirect_request(self, request, fp, code, message, headers, newurl):
         entry = {"from": request.full_url, "status": code, "to": newurl, "headers": list(headers.items())}
         self.history.append(entry)
+        if len(self.history) > 3:
+            raise InputError("Policy redirect limit exceeded")
         checked_url(newurl, self.hosts)
         return super().redirect_request(request, fp, code, message, headers, newurl)
 
 
 def fetch_policy(url, hosts, timeout):
+    from safe_http import secure_opener, open_get, bounded_read
     started = time.perf_counter()
     evidence = {"url": url, "redirects": [], "http_status": None, "headers": [], "raw_body": None,
                 "response_truncated": False, "error": None}
     visible = None
     try:
         checked_url(url, hosts)
-        opener = urllib.request.build_opener(CheckedRedirect(hosts, evidence["redirects"]))
+        opener = secure_opener(CheckedRedirect(hosts, evidence["redirects"]))
         request = urllib.request.Request(url, headers={"User-Agent": "HackathonFeasibilityProbe/1.0", "Accept": "text/html,text/plain"})
-        try:
-            response = opener.open(request, timeout=timeout)
-        except urllib.error.HTTPError as exc:
-            response = exc
+        response = open_get(opener, request, timeout, evidence.setdefault("attempts", []))
         with response:
             evidence["http_status"] = response.status
             evidence["final_url"] = response.geturl()
             evidence["headers"] = list(response.headers.items())
-            raw = response.read(MAX_BYTES + 1)
+            raw = bounded_read(response, MAX_BYTES)
             evidence["response_truncated"] = len(raw) > MAX_BYTES
             evidence["raw_body_base64"] = base64.b64encode(raw[:MAX_BYTES]).decode("ascii")
             evidence["captured_sha256"] = hashlib.sha256(raw[:MAX_BYTES]).hexdigest()

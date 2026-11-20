@@ -1,0 +1,42 @@
+{
+  "validation_date": "2026-11-19",
+  "mode": "explicit_annotations_with_live_public_sources",
+  "live_model_ran": false,
+  "status": "completed",
+  "counts": {
+    "CONTRADICTED_BY_AUTHORITATIVE_SOURCE": 2,
+    "VERIFIED_BY_AUTHORITATIVE_SOURCE": 2
+  },
+  "latency_ms": 3894.338,
+  "independent_groups": 3,
+  "sources": [
+    {
+      "method": "regulator_record_lookup",
+      "state": "VERIFIED_BY_AUTHORITATIVE_SOURCE",
+      "url": "https://www.fca.org.uk/news/warnings/ipo-horizon-clone-fca-authorised-firm",
+      "error": null,
+      "latency_ms": 2076.406
+    },
+    {
+      "method": "legal_entity_registry",
+      "state": "VERIFIED_BY_AUTHORITATIVE_SOURCE",
+      "url": "https://find-and-update.company-information.service.gov.uk/company/04333954",
+      "error": null,
+      "latency_ms": 969.951
+    },
+    {
+      "method": "rdap_domain_provenance",
+      "state": "VERIFIED_BY_AUTHORITATIVE_SOURCE",
+      "url": "https://rdap.verisign.com/com/v1/domain/ipohorizon.com",
+      "error": null,
+      "latency_ms": 832.297
+    },
+    {
+      "method": "regulator_contact_comparison",
+      "state": "CONTRADICTED_BY_AUTHORITATIVE_SOURCE",
+      "url": "https://www.fca.org.uk/news/warnings/ipo-horizon-clone-fca-authorised-firm",
+      "error": null,
+      "latency_ms": 0.252
+    }
+  ]
+}

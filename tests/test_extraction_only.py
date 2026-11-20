@@ -1,5 +1,6 @@
 """Focused extractor/metric checks only; no NVIDIA or other evidence tests."""
 import json
+from io import BytesIO
 import unittest
 from unittest.mock import patch
 from investigation.llm import (LLMExtractor, LLMFailure, OpenAIClient, expand_candidates, extraction_schema, compact_schema_errors)
@@ -65,11 +66,10 @@ class ExtractionOnlyTests(unittest.TestCase):
         self.assertIsNone(r["median_latency_ms"])
         self.assertEqual(r["result"],"FAIL")
     def test_request_uses_low_effort_and_bounded_output(self):
-        class Response:
+        class Response(BytesIO):
             status=200;headers={}
-            def __enter__(self): return self
-            def __exit__(self,*args): pass
-            def read(self,*args): return json.dumps({"status":"completed","output":[{"type":"message","content":[{"type":"output_text","text":'{"claims":[]}'}]}]}).encode()
+            def __init__(self):
+                super().__init__(json.dumps({"status":"completed","output":[{"type":"message","content":[{"type":"output_text","text":'{"claims":[]}'}]}]}).encode())
         class Opener:
             def open(self,request,timeout):
                 payload=json.loads(request.data)
