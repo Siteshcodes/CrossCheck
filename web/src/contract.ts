@@ -15,19 +15,29 @@ export type Fixture = {message:string; origin:string; annotation_mode:boolean; c
 const object=(x:unknown):x is Record<string,unknown>=>typeof x==='object'&&x!==null&&!Array.isArray(x);
 const strings=(x:unknown):x is string[]=>Array.isArray(x)&&x.every(v=>typeof v==='string');
 const validState=(x:unknown):x is EvidenceState=>Object.values(STATES).includes(x as EvidenceState);
+const finiteTime=(x:unknown):x is number=>typeof x==='number'&&Number.isFinite(x)&&x>=0;
+const nullableString=(x:unknown)=>x===null||typeof x==='string';
 export function parseInvestigation(value:unknown):Investigation {
   if(!object(value)||!Array.isArray(value.claims)||!Array.isArray(value.evidence)||!object(value.input)||typeof value.input.message!=='string'||
-    !object(value.extraction)||!object(value.summary)||!strings(value.limitations)||typeof value.explanation!=='string'||typeof value.latency_ms!=='number')
+    !object(value.extraction)||!object(value.summary)||!strings(value.limitations)||typeof value.explanation!=='string'||!finiteTime(value.latency_ms)||
+    typeof value.schema_version!=='string'||!['completed','completed_with_gaps'].includes(String(value.status)))
     throw new Error('The backend returned an incomplete investigation response. No conclusion can be displayed.');
   for(const c of value.claims) if(!object(c)||typeof c.id!=='string'||typeof c.kind!=='string'||typeof c.statement!=='string'||typeof c.source_quote!=='string'||
-    !validState(c.evidence_state)||!strings(c.evidence_ids)||!strings(c.limitations)||typeof c.finding!=='string'||typeof c.verification_method!=='string')
+    !nullableString(c.organization)||!nullableString(c.domain)||!validState(c.evidence_state)||!strings(c.evidence_ids)||!strings(c.limitations)||typeof c.finding!=='string'||typeof c.verification_method!=='string')
     throw new Error('The backend returned a malformed claim or unknown evidence state.');
   for(const e of value.evidence) if(!object(e)||typeof e.id!=='string'||typeof e.method!=='string'||!validState(e.evidence_state)||
-    !object(e.source_provenance)||!object(e.observations)||!strings(e.limitations)||typeof e.latency_ms!=='number'||
+    !object(e.source_provenance)||!object(e.observations)||!strings(e.limitations)||!finiteTime(e.latency_ms)||
     !(typeof e.evidence_group_id==='string'||e.evidence_group_id===null)) throw new Error('The backend returned malformed evidence.');
   const ids=new Set(value.evidence.map(e=>(e as Evidence).id));
   if(ids.size!==value.evidence.length||new Set(value.claims.map(c=>(c as Claim).id)).size!==value.claims.length||
     value.claims.some(c=>(c as Claim).evidence_ids.some(id=>!ids.has(id)))) throw new Error('The backend returned inconsistent evidence references.');
+  const records=new Map((value.evidence as Evidence[]).map(e=>[e.id,e]));
+  for(const c of value.claims as Claim[]){
+    if(!c.source_quote||!value.input.message.includes(c.source_quote))throw new Error('The backend returned a claim quotation absent from the submitted communication.');
+    if((c.evidence_state===STATES.VERIFIED||c.evidence_state===STATES.CONTRADICTED)&&
+      !c.evidence_ids.some(id=>{const e=records.get(id)!;return e.error==null&&e.evidence_state!==STATES.UNRESOLVED&&e.evidence_group_id&&sourceUrl(e);}))
+      throw new Error('A resolved claim has no traceable successful source.');
+  }
   return value as Investigation;
 }
 export const stateLabel=(state:EvidenceState)=>({[STATES.VERIFIED]:'Verified',[STATES.CONTRADICTED]:'Contradicted',[STATES.CONSISTENT]:'Consistent · identity unproven',[STATES.UNRESOLVED]:'Unresolved'})[state];
@@ -57,7 +67,13 @@ export function counts(result:Investigation){return {
 };}
 export async function investigate(message:string,fixture:Fixture|null,signal:AbortSignal):Promise<Investigation>{
   const payload={message,...(fixture?.annotation_mode&&fixture.message===message?{claims_annotation:fixture.claims_annotation}:{})};
-  const response=await fetch('/investigate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal});
+  let response:Response;
+  try{response=await fetch('/investigate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),signal:AbortSignal.any([signal,AbortSignal.timeout(130_000)])});}
+  catch(error){
+    if(signal.aborted)throw error;
+    if(error instanceof Error&&error.name==='TimeoutError')throw new Error('The investigation took too long. The server may still be working. Your input is preserved; retry when ready.');
+    throw new Error('Could not reach the investigation service. Check your connection and try again.');
+  }
   let data:unknown;
   try{data=await response.json();}catch{throw new Error(`The investigation service returned unreadable data (HTTP ${response.status}).`);}
   if(!response.ok){

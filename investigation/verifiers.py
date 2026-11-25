@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 import tempfile
 import time
+import re
 
 import email_header_analysis as headers
 import rdap_domain_provenance as rdap
@@ -127,6 +128,22 @@ class ReceiverHeaderVerifier:
         return Evidence(evidence_id, "receiver_reported_spf_dkim_dmarc", State(result["result"]["evidence_state"]), raw, source,
                         result["result"], tuple(headers.LIMITATIONS), round((time.perf_counter() - started) * 1000, 3),
                         None if result["status"] == "PASS" else {"type": "HeaderAnalysisFailure", "message": result["failure_reason"]})
+
+
+def authentication_claim_matches(claim, evidence):
+    """Only compare explicit method/outcome assertions; receiver reports are not identity proof."""
+    if claim.polarity != 'positive' or re.search(r"\b(not|never|no)\b|\b\w+n['’]t\b", claim.source_quote, re.I):
+        return False
+    assertions = re.findall(r'\b(spf|dkim|dmarc)\s*(?:[=:]\s*|(?:has\s+)?)?(pass(?:ed)?|fail(?:ed)?|none|neutral|softfail)\b', claim.source_quote, re.I)
+    mentioned = set(re.findall(r'\b(spf|dkim|dmarc)\b', claim.source_quote.lower()))
+    if not assertions or {m.lower() for m,_ in assertions} != mentioned:
+        return False
+    for method, outcome in assertions:
+        method, outcome = method.lower(), outcome.lower().removesuffix('ed')
+        actual = evidence.observations.get(method+'_outcomes' if method=='dkim' else method+'_outcome')
+        if (set(actual) != {outcome} if isinstance(actual, list) else actual != outcome):
+            return False
+    return True
 
 
 def official_domain_comparison(domain, policy_evidence, evidence_id):

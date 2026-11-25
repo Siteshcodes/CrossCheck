@@ -1,5 +1,9 @@
 # Forge evidence workbench
 
+> Current engineering audit: [19–20 November 2026 validation](docs/VALIDATION.md),
+> [design decisions](docs/ENGINEERING_DECISIONS.md) and [interview notes](docs/INTERVIEW_NOTES.md).
+> Historical results below predate that audit; they are not fresh release evidence.
+
 React + TypeScript + Vite frontend, served by a small Python same-origin launcher. The existing investigation API and deterministic evidence semantics remain unchanged.
 
 ## Run
@@ -52,7 +56,7 @@ npm run lint
 npm run build
 ```
 
-Final checks: 70 backend tests and 11 frontend tests passed; lint and production build passed. Browser checks covered actual API submission, claim selection, regulator contact comparison, mobile overflow, and missing-key HTTP 502 with input preserved and no substituted result.
+Historical product-build checks: 70 backend tests and 11 frontend tests passed; lint and production build passed. Browser checks covered actual API submission, claim selection, regulator contact comparison, mobile overflow, and missing-key HTTP 502 with input preserved and no substituted result.
 
 The current agent process could not access an API key. Browser success therefore used explicitly labelled fixture annotations with real live FCA, Companies House and authoritative RDAP requests, not a new live extraction benchmark. Latest live evidence request took 1.769 seconds and returned four claims: two verified, two contradicted, zero unresolved; three independent provenance groups and mechanisms. See results/product-validation.json and results/product-live-investigation.json for the actual response and report. Screenshot proof is in results/product-desktop.png and results/product-mobile.png.
 

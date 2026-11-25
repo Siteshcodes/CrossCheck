@@ -7,7 +7,8 @@ from pathlib import Path
 import re
 import time
 from urllib.error import HTTPError
-from urllib.request import HTTPRedirectHandler, Request, build_opener
+from urllib.request import HTTPRedirectHandler, Request
+from safe_http import secure_opener as build_opener, remaining_timeout, bounded_read
 
 from .models import InvalidInput, claim_schema, sha256, strict_json, validate_claims, ROUTES
 
@@ -115,9 +116,9 @@ class AnnotationExtractor:
         return cls(strict_json(Path(path).read_text(encoding="utf-8")))
 
     def extract(self, message):
-        if set(self.annotation) != {"origin", "message_sha256", "claims"}:
+        if not isinstance(self.annotation, dict) or set(self.annotation) != {"origin", "message_sha256", "claims"}:
             raise InvalidInput("Annotation requires origin, message_sha256, claims")
-        if self.annotation["origin"] not in {"fixture_annotation", "analyst_annotation"}:
+        if not isinstance(self.annotation["origin"], str) or self.annotation["origin"] not in {"fixture_annotation", "analyst_annotation"}:
             raise InvalidInput("Annotations must be labeled fixture_annotation or analyst_annotation")
         if self.annotation["message_sha256"] != sha256(message.encode("utf-8")):
             raise InvalidInput("Annotation is for a different message")
@@ -157,20 +158,24 @@ class OpenAIClient:
             opener = build_opener(NoRedirect())
             try:
                 evidence["network_request_made"] = True
-                response = opener.open(request, timeout=self.timeout)
+                response = opener.open(request, timeout=remaining_timeout(self.timeout))
             except HTTPError as exc:
                 response = exc
             with response:
                 evidence["http_status"] = response.status
                 evidence["request_id"] = response.headers.get("x-request-id")
-                raw = response.read(2_000_001)
+                raw = bounded_read(response, 2_000_000)
             evidence["network_request_made"] = True
-            evidence["raw_response"] = raw[:2_000_000].decode("utf-8", errors="replace").replace(self.api_key, "[REDACTED]")
+            # Retain transport diagnostics, not provider text that can echo secrets/input.
+            evidence["response_bytes"] = len(raw)
+            evidence["response_sha256"] = sha256(raw)
             if len(raw) > 2_000_000:
                 raise LLMFailure("LLM response exceeded size limit", evidence)
             if evidence["http_status"] != 200:
                 raise LLMFailure(f"LLM API returned HTTP {evidence['http_status']}", evidence)
             data = strict_json(raw.decode("utf-8"))
+            if not isinstance(data, dict):
+                raise LLMFailure("LLM response envelope is not an object", evidence)
             evidence["usage"] = data.get("usage")
             evidence["provider_response_status"] = data.get("status")
             evidence["incomplete_details"] = data.get("incomplete_details")
@@ -191,7 +196,7 @@ class OpenAIClient:
         except LLMFailure:
             raise
         except Exception as exc:
-            raise LLMFailure(f"{type(exc).__name__}: {exc}", evidence) from exc
+            raise LLMFailure(f"LLM transport or response failed ({type(exc).__name__})", evidence) from exc
         finally:
             evidence["latency_ms"] = round((time.perf_counter() - started) * 1000, 3)
 

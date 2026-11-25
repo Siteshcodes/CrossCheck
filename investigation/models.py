@@ -4,6 +4,8 @@ from dataclasses import asdict, dataclass
 from enum import Enum
 import hashlib
 import json
+import math
+import re
 
 
 class EvidenceState(str, Enum):
@@ -41,14 +43,45 @@ def sha256(value: bytes) -> str:
 
 
 def strict_json(text: str):
+    # Bound nesting before the recursive JSON decoder sees attacker-controlled data.
+    depth, quoted, escaped = 0, False, False
+    for char in text:
+        if quoted:
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == '"':
+                quoted = False
+        elif char == '"':
+            quoted = True
+        elif char in "[{":
+            depth += 1
+            if depth > 64:
+                raise InvalidInput("JSON nesting exceeds 64 levels")
+        elif char in "]}":
+            depth -= 1
     def pairs(items):
         result = {}
         for key, value in items:
             if key in result:
-                raise InvalidInput(f"Duplicate JSON key: {key}")
+                raise InvalidInput("Duplicate JSON key")
             result[key] = value
         return result
-    return json.loads(text, object_pairs_hook=pairs, parse_constant=lambda value: (_ for _ in ()).throw(InvalidInput(f"Invalid JSON constant: {value}")))
+    def finite(value):
+        number = float(value)
+        if not math.isfinite(number):
+            raise InvalidInput("Non-finite JSON number")
+        return number
+    return json.loads(text, object_pairs_hook=pairs, parse_float=finite,
+                      parse_constant=lambda value: (_ for _ in ()).throw(InvalidInput("Invalid JSON constant")))
+
+
+def validate_message(message):
+    if not isinstance(message, str) or not message.strip() or len(message) > 64000:
+        raise InvalidInput("message must contain 1 to 64000 characters")
+    if any(0xD800 <= ord(char) <= 0xDFFF for char in message):
+        raise InvalidInput("message contains invalid Unicode surrogates")
 
 
 @dataclass(frozen=True)
@@ -70,8 +103,7 @@ class Claim:
 
 
 def validate_claims(data, message: str) -> list[Claim]:
-    if not isinstance(message, str) or not message.strip() or len(message) > 64000:
-        raise InvalidInput("message must contain 1 to 64000 characters")
+    validate_message(message)
     if not isinstance(data, dict) or set(data) != {"claims"}:
         raise InvalidInput("Extraction must contain only claims; evidence states and verdicts are forbidden")
     values = data["claims"]
@@ -91,7 +123,7 @@ def validate_claims(data, message: str) -> list[Claim]:
             raise InvalidInput("Unsupported claim kind or extraction basis")
         if value["verification_route"] != ROUTES[value["kind"]]:
             raise InvalidInput("Invalid routing: candidate kind and verification_route do not match the backend allowlist")
-        if value["polarity"] not in {"positive", "negative"}:
+        if not isinstance(value["polarity"], str) or value["polarity"] not in {"positive", "negative"}:
             raise InvalidInput("Candidate polarity must be positive or negative")
         start, end = value["start"], value["end"]
         if type(start) is not int or type(end) is not int or not 0 <= start < end <= len(message):
@@ -107,7 +139,7 @@ def validate_claims(data, message: str) -> list[Claim]:
                 normalized = domain_name(value["domain"])
             except ValueError as exc:
                 raise InvalidInput(str(exc)) from exc
-            if normalized not in value["source_quote"].lower():
+            if not re.search(r"(?<![a-z0-9_.-])" + re.escape(normalized) + r"(?![a-z0-9_-]|\.[a-z0-9])", value["source_quote"], re.I):
                 raise InvalidInput("Claim domain must occur literally in its source excerpt")
             value = dict(value, domain=normalized)
         claims.append(Claim(**value))
@@ -118,11 +150,13 @@ def critical_claims(claims):
     """Decision-relevant projection. Report removals; never truncate to manufacture a gate pass."""
     selected, omitted, signatures = [], [], set()
     for claim in claims:
-        signature = (claim.kind, (claim.organization or "").casefold(), claim.domain, claim.polarity)
+        # Different FRNs, people, phone numbers or predicates must survive projection.
+        signature = (claim.kind, (claim.organization or "").casefold(), claim.domain,
+                     claim.polarity, claim.statement, claim.source_quote)
         if claim.kind not in CRITICAL_KINDS:
             omitted.append({"claim_id": claim.id, "reason": "Incidental, unimplemented or duplicate official-status assertion; retained in candidate provenance"})
         elif signature in signatures:
-            omitted.append({"claim_id": claim.id, "reason": "Duplicate critical predicate for the same organization/domain/polarity"})
+            omitted.append({"claim_id": claim.id, "reason": "Exact duplicate critical assertion and source wording"})
         else:
             signatures.add(signature)
             selected.append(claim)

@@ -1,4 +1,8 @@
-# Current flagship: regulated-investment clone firm — deterministic gate PASS
+# Historical architecture and MVP validation
+
+Current implementation and checks: [README](README.md), [engineering decisions](docs/ENGINEERING_DECISIONS.md), and [19–20 November 2026 validation](docs/VALIDATION.md). The dated experiments below are preserved as history. In particular, current public GETs have bounded retries and mixed inputs retain their own verification routes.
+
+# Historical flagship: regulated-investment clone firm — deterministic gate PASS
 
 See [CLONE_FEASIBILITY.md](CLONE_FEASIBILITY.md). Run `python run_clone_feasibility.py`. Live LLM accuracy remains unmeasured until local API credentials are available.
 

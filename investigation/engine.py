@@ -3,9 +3,10 @@
 from collections import Counter
 from dataclasses import replace
 import time
+from safe_http import investigation_budget
 
-from .llm import AnnotationExtractor, LLMExtractor, LLMFailure
-from .models import Evidence, EvidenceState as State, InvalidInput, sha256, critical_claims, grounding_issue, evidence_group
+from .llm import AnnotationExtractor, LLMExtractor, LLMFailure, Extraction
+from .models import Evidence, EvidenceState as State, InvalidInput, sha256, critical_claims, grounding_issue, evidence_group, validate_message
 from .verifiers import DomainVerifier, PolicyVerifier, ReceiverHeaderVerifier, official_domain_comparison
 
 
@@ -28,22 +29,38 @@ class InvestigationEngine:
         self.explainer = explainer
 
     def investigate(self, message, eml_bytes=None, original_receiver_export=False, input_origin="user_supplied"):
+        with investigation_budget():
+            return self._investigate(message, eml_bytes, original_receiver_export, input_origin)
+
+    def _investigate(self, message, eml_bytes, original_receiver_export, input_origin):
         started = time.perf_counter()
-        if not isinstance(message, str) or not message.strip() or len(message) > 64000:
-            raise InvalidInput("message must contain 1 to 64000 characters")
+        validate_message(message)
         if eml_bytes is not None and (not isinstance(eml_bytes, bytes) or len(eml_bytes) > 2_000_000 or not eml_bytes):
             raise InvalidInput("Original .eml must be nonempty bytes, at most 2000000 bytes")
         if type(original_receiver_export) is not bool:
             raise InvalidInput("original_receiver_export must be boolean")
         extraction = self.extractor.extract(message)
-        from .clone_firm import CLONE_KINDS, CloneFirmInvestigation
-        if any(c.kind in CLONE_KINDS for c in extraction.claims):
-            result = CloneFirmInvestigation(domain=self.domain).investigate_extracted(message, extraction, input_origin)
+        from .clone_firm import CloneFirmInvestigation, uses_clone_route
+        clone_claims = [c for c in extraction.claims if uses_clone_route(c)]
+        if clone_claims:
+            other_claims = [c for c in extraction.claims if not uses_clone_route(c)]
+            clone_extraction = Extraction(clone_claims, extraction.provenance)
+            result = CloneFirmInvestigation(domain=self.domain).investigate_extracted(message, clone_extraction, input_origin)
+            if other_claims:
+                from .routing import merge_investigations
+                other = self._investigate_extracted(message, Extraction(other_claims, extraction.provenance), eml_bytes, original_receiver_export, input_origin)
+                result = merge_investigations(result, other, extraction.claims)
             result["latency_ms"] = round((time.perf_counter() - started) * 1000, 3)
-            if eml_bytes is not None:
+            if eml_bytes is not None and not other_claims:
                 result["input"]["eml_supplied"] = True
                 result["limitations"].append("Supplied email bytes are not analysed or counted by the clone-firm slice.")
             return result
+        result = self._investigate_extracted(message, extraction, eml_bytes, original_receiver_export, input_origin)
+        result["latency_ms"] = round((time.perf_counter() - started) * 1000, 3)
+        return result
+
+    def _investigate_extracted(self, message, extraction, eml_bytes, original_receiver_export, input_origin):
+        started = time.perf_counter()
         claims, omitted = critical_claims(extraction.claims)
         grounding = {c.id: grounding_issue(c, message) for c in claims}
         evidence, domains, comparisons = [], {}, {}
@@ -63,10 +80,12 @@ class InvestigationEngine:
                 item = verifier(evidence_id)
                 if not isinstance(item, Evidence) or item.id != evidence_id or not isinstance(item.evidence_state, State):
                     raise ValueError("Verifier returned an invalid deterministic evidence contract")
+                if item.error and item.evidence_state != State.NO_DATA:
+                    raise ValueError("Failed evidence cannot resolve a claim")
             except Exception as exc:
-                item = Evidence(evidence_id, method, State.NO_DATA, {"exception_type": type(exc).__name__, "exception_message": str(exc)},
+                item = Evidence(evidence_id, method, State.NO_DATA, {"exception_type": type(exc).__name__},
                                 {"origin": "verifier_failure"}, {}, ("Verifier failure is a data gap, not a contradiction.",), round((time.perf_counter() - attempt_started) * 1000, 3),
-                                {"type": type(exc).__name__, "message": str(exc)})
+                                {"type": type(exc).__name__, "message": "Verifier failed; authoritative evidence is unavailable."})
             return add(item)
 
         known = any(claim.organization and claim.organization.casefold() == "nvidia" for claim in claims)
@@ -103,6 +122,10 @@ class InvestigationEngine:
             elif claim.kind == "email_authentication":
                 state, method, used, limitations = header.evidence_state, header.method, [header.id], list(header.limitations)
                 finding = "The receiver reports DMARC=" + header.observations.get("dmarc_outcome", "unresolved") + "; no independent authentication was performed."
+                from .verifiers import authentication_claim_matches
+                if state != State.NO_DATA and not authentication_claim_matches(claim, header):
+                    state = State.NO_DATA
+                    finding += " The supplied assertion does not match the supported receiver results; it remains unresolved."
             elif claim.kind in {"equipment_fee", "reimbursement"} and nvidia:
                 method, used, limitations = "official_policy_fee_warning_scope_check", [policy.id], list(policy.limitations)
                 finding = "NVIDIA's captured warning mentions upfront-fee requests, but does not explicitly establish the asserted equipment fee, vendor authorization or reimbursement. The fee claim remains unresolved."
@@ -162,7 +185,7 @@ class InvestigationEngine:
         summary = summarize(results, evidence, extraction.provenance)
         all_limitations = list(dict.fromkeys(GLOBAL_LIMITATIONS + [limit for item in evidence for limit in item.limitations]))
         return {
-            "schema_version": "1.0", "status": "completed_with_gaps" if any(item["evidence_state"] == State.NO_DATA.value for item in results) else "completed",
+            "schema_version": "1.0", "status": "completed_with_gaps" if not results or any(item["evidence_state"] == State.NO_DATA.value for item in results) else "completed",
             "input": {"message": message, "message_sha256": sha256(message.encode()), "origin": input_origin, "eml_supplied": eml_bytes is not None},
             "extraction": {**extraction.provenance, "omitted_candidates": omitted},
             "summary": summary,
